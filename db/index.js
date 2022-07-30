@@ -1,9 +1,6 @@
 const { STRING, INTEGER, DECIMAL } = require('sequelize')
 const Sequelize = require('sequelize')
-const conn = new Sequelize('acme_schools_db', 'seth.king', 'Poiop90lik8', {
-    host: 'localhost',
-    dialect: 'postgres'
-})
+const conn = new Sequelize('postgres://localhost/acme_schools_db' || process.env.DATABASE_URL)
 
 const Student = conn.define('student', {
     firstName: {

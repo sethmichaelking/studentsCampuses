@@ -64,8 +64,8 @@ class Home extends Component {
             <tr key={student.id}>
                 <td>{student.firstName} </td>
                 <td>{student.lastName} </td>
-                <td>{student.campusId ? 'We have one' : 'No data found'} </td>
-                <td>{student.lastName} </td>
+                <td>{student.email} </td>
+                <td>{student.gpa} </td>
                 </tr>
             </>
         ))
@@ -85,8 +85,8 @@ class Home extends Component {
         <tr key={student.id}>
             <td>{student.firstName} </td>
             <td>{student.lastName} </td>
-            <td>Campus placeholder </td>
-            <td>{student.lastName} </td>
+            <td>{student.email} </td>
+            <td>{student.gpa} </td>
             </tr>
         </>
           ))
@@ -151,16 +151,6 @@ class Home extends Component {
       console.log(err)
     }
   }
-  // componentDidUpdate(prevProps){
-  //   try{
-  //     if (prevProps.id === undefined){
-  //       console.log('dispatch set')
-  //     }
-  //   }
-  //   catch(err){
-  //     console.log(err)
-  //   }
-  // }
   render() {
     const { students, campuses, select } = this.props
     return (
@@ -200,7 +190,7 @@ class Home extends Component {
                     <tr style={{ borderBottom: 'thin solid #dadce5', backgroundColor: '#f4f4f7', color: '#1a1c25'}}>
                       <th style={{fontSize: '15px'}}>First Name</th>
                       <th style={{fontSize: '15px'}}>Last Name</th>
-                      <th style={{fontSize: '15px'}}>Campus</th>
+                      <th style={{fontSize: '15px'}}>Email</th>
                       <th style={{fontSize: '15px'}}>GPA</th>
                     </tr>
                   </thead>
@@ -218,7 +208,45 @@ class Home extends Component {
                   </>
                   : 
                     console.log('there is no select')}
-                  {/* {students && select.id ? students
+                  </tbody>
+                </Table>
+            </GridWrapper>
+             </div>
+            </div> 
+        </div>
+    )
+  }
+}
+
+const mapState = (state, otherProps) => {
+  console.log(otherProps)
+  return {
+      students: state.students.sort((a,b) => b.gpa - a.gpa),
+      campuses: state.campuses.sort((a,b) => a.id - b.id),
+      select: state.selected,
+  }
+}
+const mapDispatch = (dispatch) => {
+  return {
+      load: () => {
+          dispatch(fetchCampuses())
+          dispatch(setTheSelect())
+      }
+   }
+}
+
+export default connect(mapState, mapDispatch)(Home)
+
+
+
+
+
+
+
+
+
+
+{/* {students && select.id ? students
                   .filter(student => student.campusId === select.id).map(student => {
                     const school = campuses.find(campus => campus.id === student.campusId)
                       return (
@@ -261,31 +289,16 @@ class Home extends Component {
                           )
                         })
                   } */}
-                  </tbody>
-                </Table>
-            </GridWrapper>
-             </div>
-            </div> 
-        </div>
-    )
-  }
-}
 
-const mapState = (state, otherProps) => {
-  console.log(otherProps)
-  return {
-      students: state.students.sort((a,b) => b.gpa - a.gpa),
-      campuses: state.campuses.sort((a,b) => a.id - b.id),
-      select: state.selected,
-  }
-}
-const mapDispatch = (dispatch) => {
-  return {
-      load: () => {
-          dispatch(fetchCampuses())
-          dispatch(setTheSelect())
-      }
-   }
-}
 
-export default connect(mapState, mapDispatch)(Home)
+
+  // componentDidUpdate(prevProps){
+  //   try{
+  //     if (prevProps.id === undefined){
+  //       console.log('dispatch set')
+  //     }
+  //   }
+  //   catch(err){
+  //     console.log(err)
+  //   }
+  // }

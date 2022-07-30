@@ -5,16 +5,17 @@ import { fetchCampuses, fetchStudents, setTheSelect } from '../store'
 import React, { Component } from 'react'
 
 class Filters extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
-            filterSelection: 'all'
+            filterSelection: this.props.selected
         }
         this.handleSelection = this.handleSelection.bind(this)
     }
+    // select an option programtticaly wiyh react
     handleSelection(value){
         this.props.homeSelect(value)
-       console.log(value)
+        this.setState({ filterSelection: value })
     }
 
     componentDidMount(){
@@ -26,9 +27,9 @@ class Filters extends Component {
         }
     }
     render(){
-    const {campuses} = this.props
+    const {campuses, selected} = this.props
     const { handleSelection } = this
-
+    const { filterSelection } = this.state
     return (
     <div>
         <div style={{ height: '68px', width: '90vw', border: '1px solid #dadce5',
@@ -54,6 +55,7 @@ class Filters extends Component {
                             }}> 
                               <div style={{marginRight: '8px'}}>
                                     <select 
+                                        value= {filterSelection.id}
                                         onChange={(e) => handleSelection(e.target.value) }
                                         style={{
                                             height: '35px', 
@@ -92,6 +94,7 @@ class Filters extends Component {
                               <div>
                                 {/* insert filter here */}
                               </div>
+                              {/* //if there is a selected shwo selected if there isnt show campuses */}
                             </div>
                       </div>
                 </div>
@@ -104,7 +107,8 @@ class Filters extends Component {
 const mapState = (state) => {
     return {
         students: state.students,
-        campuses: state.campuses
+        campuses: state.campuses,
+        selected: state.selected
     }
 }
 
