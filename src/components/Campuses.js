@@ -1,10 +1,53 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { fetchCampuses, fetchStudents } from '../store'
+import { fetchCampuses, fetchStudents, deleteCampus } from '../store'
+import CampusesModal from './CampusesModal'
+import { Button } from 'react-bootstrap'
+import styled from 'styled-components';
+import Table from 'react-bootstrap/Table';
+import Filters from './Filters'
 
+const GridWrapper = styled.div`
+  display: grid;
+  grid-gap: 10px;
+  margin-top: 1em;
+  margin-left: 6em;
+  margin-right: 6em;
+`;
+  
+  const HeadWrapper = styled.div`
+  display: grid;
+  grid-gap: 10px;
+  margin-top: 1em;
+  margin-left: 3em;
+  margin-right: 6em;
+  border-bottom: 1px solid #dadce5;
+  width: 100vw;
+  margin-bottom: 20px
+
+`;
 class Campuses extends Component {
-
+    constructor(){
+        super()
+        this.state = {
+            
+        }
+        this.remove = this.remove.bind(this)
+        this.average = this.average.bind(this)
+    }
+    remove(campus){
+        this.props.removeCampus(campus)
+    }
+    average(students) {
+        let total = 0
+        for (let i = 0; i < students.length; i++){
+            let student = students[i]
+            total += student.gpa * 1
+        }
+        let newTotal = total/students.length
+        return newTotal
+      }
   componentDidMount(){
     try {
         this.props.load()
@@ -14,49 +57,85 @@ class Campuses extends Component {
     }
   }
   render() {
-    const { students, campuses } = this.props 
+    const { students, campuses } = this.props
+    const { remove } = this
     return (
       <div>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <Link to='/students'>
-                <h6 className="navbar-brand" style={{marginRight: '20px'}}>Acme Schools</h6>
-            </Link>
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-            </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav mr-auto">
-                        <li className="nav-item active" style={{marginRight: '20px' }}>
-                            <Link to='/students'>
-                            <h6 className="nav-link" href="#">Students ({students.length}) <span className="sr-only">(current)</span></h6>
-                            </Link>
-                        </li>
-                        <li className="nav-item" style={{ border: '2px solid red' }}>
-                            <Link to='/campuses'>
-                            <h6 className="nav-link">Campuses ({campuses.length})</h6>
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
             <div>
                 <div>
-                    Here are the campuses and their amount of enrollments
-                        {campuses.map(campus => {
-                            return (
-                            <div key={campus.id}>
-                                <h5> {campus.name} has {campus.students.length} amount of students </h5>
-                                    <ul>
-                                        <li>
-                                            Address: {campus.address}
-                                        </li>
-                                        <li>
-                                            School description: {campus.description}
-                                        </li>
-                                    </ul>
+                <HeadWrapper>
+                    <div>
+                        <div style={{
+                            display: 'inline-block',
+                            }}>
+                            <div style={{
+                                display: 'inline-block',
+                            }}> 
+                            <h2 style={{marginLeft: '1.5em', marginBottom: '15px'}}> Campuses </h2>                            </div>
+                            <div style={{
+                                display: 'inline-block',
+                                position: 'relative',
+                                left: '595px',
+                            }}> 
+                                <CampusesModal /> 
                             </div>
-                            )
-                        })}
+                        </div>
+                    </div>
+                 </HeadWrapper>
+                <GridWrapper>
+                {/* <Filters /> */}
+                  <div style={{
+                        height: '45px',
+                        border: '1px solid #dadce5',
+                        backgroundColor: 'white',
+                        marginBottom: '-10px'
+                    }}>
+                        <div>
+                            <div style={{display: 'inline-block'}}>
+                                <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}> Campuses ({campuses.length}) </p>                           
+                            </div>
+                            <div style={{display: 'inline-block', float:'right', paddingRight: '10px'}}>
+                                {/* <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}>  </p>                            */}
+                            </div>
+                        </div>
+                    </div>
+                     <Table bordered hover>
+                        <thead>
+                            <tr>  
+                            <th>Campus Name</th>
+                            <th>Address</th>
+                            <th>Description</th>
+                            <th> Students </th>
+                            <th> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {campuses.map(campus => {
+                                return (
+                                    <tr key={campus.id}>
+                                    <td> <Link to={`/campuses/${campus.id}`}> {campus.name} </Link></td>
+                                    <td>{campus.address}</td>
+                                    <td>{campus.description}</td>
+                                    <td> 
+                                            {campus.students ? campus.students.map(
+                                                student => {
+                                                    return (
+                                                        <div key={student.id}>
+                                                            {student.firstName ? <Link to={`/students/${student.id}`}>  {`${student.firstName}`} </Link> : 'loading'} {student.lastName}
+                                                        </div>
+                                                    )
+                                                }
+                                            ) : 
+                                            campus.name
+                                        }
+                                    </td>
+                                    <td> <Button variant="danger" onClick={()=> remove(campus.id)}>Delete School</Button></td>
+                                </tr>
+                                )
+                            })}
+                            </tbody>
+                        </Table>
+                    </GridWrapper>
                 </div>
             </div>
       </div>
@@ -67,7 +146,7 @@ class Campuses extends Component {
 const mapState = (state) => {
     return {
         students: state.students,
-        campuses: state.campuses 
+        campuses: state.campuses.sort((a,b) => a.id - b.id)
     }
 }
 const mapDispatch = (dispatch) => {
@@ -75,7 +154,8 @@ const mapDispatch = (dispatch) => {
         load: () => {
             dispatch(fetchCampuses())
             dispatch(fetchStudents())
-        }
+        },
+        removeCampus: (campus) => dispatch(deleteCampus(campus))
     }
 }
 export default connect(mapState, mapDispatch)(Campuses)

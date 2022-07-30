@@ -2,9 +2,43 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchCampuses, fetchStudents } from '../store'
+import TheModal from './TheModal'
+import { removetStudent } from '../store'
+import styled from 'styled-components';
+import { Table } from 'react-bootstrap'
+import Filters from './Filters'
+
+const HeadWrapper = styled.div`
+display: grid;
+grid-gap: 10px;
+margin-top: 1em;
+margin-left: 3em;
+margin-right: 6em;
+border-bottom: 1px solid #dadce5;
+width: 100vw;
+margin-bottom: 20px
+`;
+
+const GridWrapper = styled.div`
+  display: grid;
+  grid-gap: 10px;
+  margin-top: 1em;
+  margin-left: 6em;
+  margin-right: 6em;
+`;
+
 
 class Students extends Component {
+    constructor(){
+        super()
+        this.state = {
 
+        }
+        this.save = this.save.bind(this)
+    }
+    save(id){
+         this.props.deleteStudent(id)
+    }
     componentDidMount(){
         try {
             this.props.load()
@@ -15,64 +49,60 @@ class Students extends Component {
     }
   render() {
     const { students, campuses } = this.props
+    const { save } = this
     return (
       <div>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <Link to='/students'>
-                <h6 className="navbar-brand" style={{marginRight: '20px'}}>Acme Schools</h6>
-            </Link>
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-            </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav mr-auto">
-                        <li className="nav-item active" style={{marginRight: '20px', border: '2px solid red'  }}>
-                            <Link to='/campuses'>
-                            <h6 className="nav-link" href="#">Students({students.length})<span className="sr-only">(current)</span></h6>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to='/campuses'>
-                            <h6 className="nav-link" href="#">Campuses ({campuses.length})</h6>
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        <div style={{marginLeft: '40px'}}>
-            <div>
-                Here are the list of students and where they are going to school.
-                <ul>
-                 {students ? students.map(student => {
-                    const school = campuses.find(campus => campus.id === student.campusId)
-                    return (
-                        <li key={student.id}>
-                            <Link to={`/students/${student.id}`}> {student.firstName} </Link> goes to {school ? school.name : 'loading'}
-                        </li>
-                    )
-                }) : 'there are no students'} 
-                </ul>
-            </div>
-        </div>
-            <div>
-                <div className="container">
-                    <div className="row">
-                        {students.map(student => {
-                            const campus = campuses.find((campus) => campus.id === student.campusId)
-                            return (
-                                <div key={student.id} className="col card" style={{marginRight: '10px', marginTop: '10px'}}>
-                                    <ul>
-                                        <li> First Name: {student.firstName} </li>  
-                                        <li> Last Name: {student.lastName} </li>
-                                        <li> Email: {student.email} </li>
-                                        <li> Image Url: {student.imageUrl} </li> 
-                                        <li> GPA: {student.gpa} </li>
-                                        <li> Campus: {campus ? campus.name : 'loading'} </li>
-                                    </ul>
-                                </div>
-                            )
-                        })}
+        <div>
+            <div> 
+                <HeadWrapper>
+                    <div>
+                        <div style={{
+                            display: 'inline-block',
+                            }}>
+                            <div style={{
+                                display: 'inline-block',
+                            }}> 
+                            <h2 style={{marginLeft: '1.5em', marginBottom: '15px'}}> Students </h2>                            </div>
+                            <div style={{
+                                display: 'inline-block',
+                                position: 'relative',
+                                left: '620px',
+                            }}> 
+                                <TheModal /> 
+                            </div>
+                        </div>
                     </div>
+                </HeadWrapper>
+                <GridWrapper>
+                    <div>
+                        <div>
+                        {/* <Filters /> */}
+                        </div>
+                        <Table bordered hover>
+                            <thead>
+                                <tr>
+                                <th>FirstName</th>
+                                <th>Actions</th>
+                                <th>School</th>
+                                <th>GPA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    {students ? students.map(student => {
+                                    const school = campuses.find(campus => campus.id === student.campusId)
+                                    return (
+                                        <tr key={student.id}>
+                                            <td> <Link to={`/students/${student.id}`}> {student.firstName} </Link> </td>
+                                            <td> <button onClick={() => save(student.id)}> X </button> </td>
+                                            <td>{school ?  <Link to={`/campuses/${school.id}`}> {`${school.name}`} </Link> : 'Not enrolled'}</td>
+                                            <td> {student.gpa} </td>
+                                        </tr>
+                                    )
+                                }) : 'there are no students'} 
+                            </tbody>
+                        </Table> 
+                    </div>
+                </GridWrapper>
                 </div>
             </div>
       </div>
@@ -92,7 +122,8 @@ const mapDispatch = (dispatch) => {
         load: () => {
             dispatch(fetchCampuses())
             dispatch(fetchStudents())
-        }
+        },
+        deleteStudent: (id) => dispatch(removetStudent(id))
     }
 }
-export default connect(mapState, mapDispatch)(Students)
+export default connect(mapState, mapDispatch)(Students, TheModal)

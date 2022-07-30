@@ -25,6 +25,15 @@ const Student = conn.define('student', {
     },
     gpa:  {
         type: DECIMAL
+    },
+    location: {
+        type: STRING
+    },
+    major: {
+        type: STRING
+    },
+    phone: {
+        type: STRING
     }
 })
 
@@ -40,6 +49,12 @@ const Campus = conn.define('campus', {
     },
     description: {
         type: STRING.apply(350)
+    },
+    city: {
+        type: STRING
+    },
+    profilePicture: {
+        type: STRING
     }
 })
 

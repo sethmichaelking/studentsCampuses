@@ -1,57 +1,30 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { fetchCampuses, fetchStudents } from '../store'
+import { fetchCampuses, fetchStudents, updateFirstName, updateLastName, updateTheEmail } from '../store'
+import EasyEdit from 'react-easy-edit';
+import styled from 'styled-components';
+import Table from 'react-bootstrap/Table';
+import {toastr} from 'react-redux-toastr'
+import Profile from './Profile';
+const GridWrapper = styled.div`
+  display: grid;
+  grid-gap: 10px;
+  margin-top: 1em;
+  margin-left: 6em;
+  margin-right: 6em;
+`;
 
+
+  
 class Student extends Component {
-
-    componentDidMount(){
-        try {
-            this.props.load()
-        }
-        catch(err){
-            console.log(err)
-        }
-    }
   render() {
-    const { students, campuses, student, campus } = this.props
-    console.log(campus)
+    const { student, campus } = this.props
     return (
       <div>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <Link to='/students'>
-                <h6 className="navbar-brand" style={{marginRight: '20px'}}>Acme Schools</h6>
-            </Link>
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-            </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav mr-auto">
-                        <li className="nav-item active" style={{marginRight: '20px', border: '2px solid red' }}>
-                            <Link to='/students'>
-                            <h6 className="nav-link" href="#">Students {'>'} ({student.firstName ? student.firstName : 'loading'}) <span className="sr-only">(current)</span></h6>
-                            </Link>
-                        </li>
-                        <li className="nav-item" >
-                            <Link to='campuses'>
-                            <h6 className="nav-link" href="#">Campuses</h6>
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-            <div>
-                <div>
-                   <h5> {student.firstName} goes to <Link to={`/campuses/${campus.id}`}> {campus.name || 'loading'} </Link></h5>
-                </div>
-                <div>
-                  <ul>
-                    <li> Fullname: {student.firstName} {student.lastName} </li>
-                    <li> Email: {student.email}</li>
-                    <li> GPA {student.gpa} </li>
-                  </ul>
-                </div>
-            </div>
+        <GridWrapper>
+             <Profile student={student} id={this.props.id} campus={campus} firstName={this.props.firstName} lastName= {this.props.lastName} />
+        </GridWrapper>
       </div>
     )
   }
@@ -64,16 +37,21 @@ const mapState = (state, otherProps) => {
         students: state.students,
         campuses: state.campuses,
         student,
-        campus
+        campus,
+        id
     }
 }
 
-const mapDispatch = (dispatch) => {
+const mapDispatch = (dispatch, otherProps) => {
+    const id = otherProps.match.params.id * 1
     return {
         load: () => {
             dispatch(fetchStudents()),
             dispatch(fetchCampuses())
-        }  
+        },
+        firstName: (value, id) => dispatch(updateFirstName({ value: value, id: id })),
+        lastName: (value, id) => dispatch(updateLastName({ value: value, id: id })),
+        saveTheEmail: (value, id) => dispatch(updateTheEmail({ value: value, id: id }))
     }
 }
 export default connect(mapState, mapDispatch)(Student)
