@@ -18,7 +18,7 @@ class Filters extends Component {
     clearInput(val){
         console.log("clearval", val, "typeof val", typeof val)
         this.setState({ inputVal: '' })
-        this.setState({ showDelete: true })
+        this.setState({ showDelete: !showDelete })
     }
     setInputVal(val) {
         this.setState({inputVal: val})
@@ -67,7 +67,7 @@ class Filters extends Component {
                              <div className="input-group col-md-4" style={{marginRight: '-38px', marginLeft: '-20px', width: '800px'}}>
                                 <input className="form-control py-2" type="search" placeholder='search students' value={inputVal} onChange={(e) => {this.setState({ inputVal: e.target.value})}} id="example-search-input"></input>
                                 <span className="input-group-append">
-                                    <button className="btn" type="button" disabled={inputVal.length === 0} style={{border: 'thin solid #dadce5'}} onClick={() => saveInput(inputVal)}>
+                                    <button className="btn" type="button" disabled={inputVal.length === 0 && this.state.showDelete === false ? true : false} style={{border: 'thin solid #dadce5'}} onClick={() => saveInput(inputVal)}>
                                         {inputVal.length > 0 ? 
                                             <i 
                                                 className="fa fa-search">

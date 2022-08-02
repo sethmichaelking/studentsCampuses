@@ -86,7 +86,7 @@ class Students extends Component {
                                         <BsClipboardData /> No student found. 
                                       </h3>
                                       <h5 style={{ marginLeft: '20px', marginTop: '20px' }}> 
-                                      <Button onClick={()=> window.location.reload()}>Reset Filters</Button>
+                                      <Button varient="secondary" onClick={()=> window.location.reload()}>Reset Filters</Button>
                                       </h5>
                                   </div>
                             </div>
