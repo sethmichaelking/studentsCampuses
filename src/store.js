@@ -46,15 +46,26 @@ const studentReducer = (state = [], action) => {
     }
     return state
 }
+const searchReducer = (state = [], action) => {
+    if (action.type === "SET_SEARCH"){
+        return action.search
+    }
+    return state
+}
 
 const reducer = combineReducers({
     campuses: campusReducer,
     students: studentReducer,
     toastr: toastrReducer,
-    selected: filterSelect
+    selected: filterSelect,
+    search: searchReducer
 })
 
-
+export const setSearch = (search) => {
+    return async(dispatch) => {
+        dispatch({ type: "SET_SEARCH", search })
+    }
+}
 
 
 

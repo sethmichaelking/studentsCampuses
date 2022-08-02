@@ -3,6 +3,7 @@
     display: flex;
   }
   
+  
   .search input {
     background-color: white;
     border: 0;
@@ -103,6 +104,14 @@ main{
     display: flex;
     font-size: 25px;
     margin-left: 50px;
+}
+.iconSearchHeader {
+  padding-left: 2px;
+  background: url("https://static.thenounproject.com/png/101791-200.png") no-repeat left;
+  background-size: 20px;
+  background-position-x: 4px;
+  background-blend-mode: lighten;
+  opacity: .7;
 }
 .link{
     display: flex;

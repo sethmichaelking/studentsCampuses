@@ -58,11 +58,12 @@ class Home extends Component {
 
   getAllStudents(students, select){
     try {
+      if (students.length > 0){
       return (
         students.map(student => (
           <>
             <tr key={student.id}>
-                <td>{student.firstName} </td>
+                <td><Link to={`/students/${student.id}`}> {student.firstName}  </Link> </td>
                 <td>{student.lastName} </td>
                 <td>{student.email} </td>
                 <td>{student.gpa} </td>
@@ -71,6 +72,29 @@ class Home extends Component {
         ))
       )
     }
+    return (
+      <>
+      <tr style={{borderBottom: 'thin solid #dadce5'}}>
+              <td colSpan={6} style={{ borderBottom: 'thin solid #dadce5' }}>
+                <div >
+                    <div style= {{ height: '200px', width: '87vw'}} > 
+                            <div style={{ textAlign: 'center', justifyContent: 'center', marginTop: '150px' }}>
+                                <h3>
+                                  <BsClipboardData /> No students enrolled 
+                                </h3>
+                                <h5> 
+                                  <Link to='/students'>
+                                    <Button variant="secondary">Create first student</Button>
+                                  </Link>
+                                </h5>
+                            </div>
+                      </div>
+                   </div>
+                </td>
+            </tr>
+      </>
+    )
+  }
     catch(err){
       console.log(err)
     }
@@ -83,7 +107,7 @@ class Home extends Component {
           filteredStudents.map(student => (
        <>
         <tr key={student.id}>
-            <td>{student.firstName} </td>
+            <td><Link to={`/students/${student.id}`}> {student.firstName} </Link> </td>
             <td>{student.lastName} </td>
             <td>{student.email} </td>
             <td>{student.gpa} </td>
@@ -120,6 +144,7 @@ class Home extends Component {
     }
   }
   average(students) {
+    if(students.length > 0){
     let total = 0
     for (let i = 0; i < students.length; i++){
         let student = students[i]
@@ -127,6 +152,8 @@ class Home extends Component {
     }
     let newTotal = total/students.length
     return newTotal.toString().slice(0, 3)
+  }
+  return 0
   }
   averageOneCampusGPA(select, students){
     try {
