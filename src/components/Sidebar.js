@@ -52,14 +52,15 @@ class NavItem extends Component {
         <Link 
             to={this.props.path} style={{
             marginTop: '19px', 
-            fontSize: '35px'
+            fontSize: '35px',
           }} 
             className={this.props.css} 
             onClick={this.handleClick}
           >
             <div 
               style={{ 
-              fontSize: '13px',
+              fontFamily: 'sans-serif',
+              fontSize: '12px',
               // textDecoration: 'underline', 
             }}> 
               {this.props.name} 

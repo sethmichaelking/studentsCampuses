@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Component } from 'react'
 import { createSchool } from '../store'
 
-
 class CampusesModal extends Component {
     constructor(){
         super()

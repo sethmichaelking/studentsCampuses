@@ -1,10 +1,9 @@
-import { InputPicker, DateRangePicker } from 'rsuite'
-import { useState } from 'react'
+
 import { connect } from 'react-redux'
-import { fetchCampuses, fetchStudents, setSearch, setTheSelect } from '../store'
+import { fetchCampuses, fetchStudents, setCampusSearch } from '../store'
 import React, { Component } from 'react'
 
-class Filters extends Component {
+class CampusSearch extends Component {
     constructor(props){
         super(props)
         this.state = {
@@ -65,7 +64,7 @@ class Filters extends Component {
                                 WebkitBoxAlign: 'center'
                             }}> 
                              <div className="input-group col-md-4" style={{marginRight: '-38px', marginLeft: '-20px', width: '800px'}}>
-                                <input className="form-control py-2" type="search" placeholder='search students' value={inputVal} onChange={(e) => {this.setState({ inputVal: e.target.value})}} id="example-search-input"></input>
+                                <input className="form-control py-2" type="search" placeholder='search campuses' value={inputVal} onChange={(e) => {this.setState({ inputVal: e.target.value})}} id="example-search-input"></input>
                                 <span className="input-group-append">
                                     <button className="btn" type="button" disabled={inputVal.length === 0 && showDelete === false ? true : false} style={{border: 'thin solid #dadce5'}} onClick={() => saveInput(inputVal)}>
                                         {inputVal.length > 0 ? 
@@ -100,7 +99,6 @@ const mapState = (state) => {
     return {
         students: state.students,
         campuses: state.campuses,
-        selected: state.selected
     }
 }
 
@@ -110,8 +108,8 @@ const mapDispatch = (dispatch) => {
             dispatch(fetchCampuses())
             dispatch(fetchStudents())
         },
-        getSearch: (search) => dispatch(setSearch(search))
+        getSearch: (search) => dispatch(setCampusSearch(search))
     }
 }
 
-export default connect(mapState, mapDispatch)(Filters)
+export default connect(mapState, mapDispatch)(CampusSearch)

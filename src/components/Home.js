@@ -185,7 +185,7 @@ class Home extends Component {
        <HeadWrapper >
           <h2 style={{marginLeft: '1.5em', marginBottom: '15px'}}> Home </h2>
         </HeadWrapper>  
-        <div style={{ borderTop:  '1px solid #dadce5', marginTop: '-20px', height: '648px', backgroundColor: '#f4f4f7'}} >
+        <div style={{ borderTop:  '1px solid #dadce5', marginTop: '-20px', height: '100vh', backgroundColor: '#f4f4f7'}} >
          <div>
           <GridWrapper>
               <Filters/>  

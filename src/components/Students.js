@@ -41,7 +41,8 @@ class Students extends Component {
     constructor(){
         super()
         this.state = {
-            show: false
+            show: false,
+            studentLength: 0
         }
         this.save = this.save.bind(this)
         this.handleClose = this.handleClose.bind(this),
@@ -49,14 +50,20 @@ class Students extends Component {
         this.save = this.save.bind(this)
         this.showEmpty = this.showEmpty.bind(this)
         this.displayStudents = this.displayStudents.bind(this)
+        this.updateStudentLength = this.updateStudentLength.bind(this)
+    }
+    updateStudentLength(val){
+        if(this.state.studentLength !== val){
+            this.setState({ studentLength: val })
+        }
     }
     displayStudents(students, search){
-        console.log("search", search, "sarch len", search.length, "sarch type", typeof search, "sarch length greataer than zero", search.length > 0);
         if (students.length > 0 && search.length > 0){
             const foundStudent = students.filter(student => student.firstName.includes(search))
-            console.log("studnets found",  foundStudent)
             const school = this.props.campuses.find(campus => campus.id === foundStudent.campusId)
             if (foundStudent.length > 0){
+            console.log('students and search length:', foundStudent.length)
+            this.updateStudentLength(foundStudent.length)
             return (
                     foundStudent.map(student => {
                         const school = this.props.campuses.find(campus => campus.id === foundStudent.campusId)
@@ -75,6 +82,8 @@ class Students extends Component {
                     })
             )
           } 
+          console.log('nobody', 0)
+          this.updateStudentLength(0)
           return (
             <>
             <tr style={{borderBottom: 'thin solid #dadce5'}}>
@@ -97,6 +106,8 @@ class Students extends Component {
           )
         } 
         else if (students.length > 0){
+            console.log('students length:', students.length)
+            this.updateStudentLength(students.length)
                return (
                 students.map(student => {
                     const school = this.props.campuses.find(campus => campus.id === student.campusId)
@@ -116,6 +127,8 @@ class Students extends Component {
                )
         } 
         else if (students.length === 0){
+            console.log('no students', students.length)
+            this.updateStudentLength(students.length)
               return (
             <>
             <tr style={{borderBottom: 'thin solid #dadce5'}}>
@@ -149,6 +162,7 @@ class Students extends Component {
     }
     showEmpty(students){
           if (students.length === 0){
+            console.log('zero length:', students.length)
           return (
             <>
             <tr style={{borderBottom: 'thin solid #dadce5'}}>
@@ -180,9 +194,10 @@ class Students extends Component {
         }
     }
   render() {
-    const { students, campuses, search } = this.props
-    const { save, handleClose, showEmpty, displayStudents } = this
-    console.log('search', search)
+    const { students, search } = this.props
+    const { studentLength } = this.state
+    console.log('localstate:', studentLength)
+    const { displayStudents } = this
     return (
       <div>
         <div>
@@ -195,7 +210,7 @@ class Students extends Component {
                             <div style={{
                                 display: 'inline-block',
                             }}> 
-                            <h2 style={{marginLeft: '1.5em', marginBottom: '15px'}}> Students </h2>                            </div>
+                            <h2 style={{marginLeft: '1.5em', marginBottom: '15px'}}> Students </h2> </div>
                             <div style={{
                                 display: 'inline-block',
                                 position: 'relative',
@@ -206,7 +221,7 @@ class Students extends Component {
                         </div>
                     </div>
                 </HeadWrapper>
-                <div style={{ borderTop:  '1px solid #dadce5', marginTop: '-20px', height: '648px', backgroundColor: '#f4f4f7'}}>
+                <div style={{ borderTop:  '1px solid #dadce5', marginTop: '-20px', height: '100vh', backgroundColor: '#f4f4f7'}}>
                     <div>
                     <GridWrapper>
                              <div>
@@ -220,7 +235,7 @@ class Students extends Component {
                             }}>
                                 <div>
                                     <div style={{display: 'inline-block'}}>
-                                        <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}> Students ({students.length}) </p>                           
+                                        <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}> Students ({studentLength}) </p>                           
                                     </div>
                                 </div>
                             </div>

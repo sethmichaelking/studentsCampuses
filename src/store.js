@@ -52,13 +52,20 @@ const searchReducer = (state = [], action) => {
     }
     return state
 }
+const campusSearchReducer = (state = [], action) => {
+    if (action.type === "SET_SEARCH"){
+        return action.search
+    }
+    return state
+}
 
 const reducer = combineReducers({
     campuses: campusReducer,
     students: studentReducer,
     toastr: toastrReducer,
     selected: filterSelect,
-    search: searchReducer
+    search: searchReducer,
+    campusSearch: campusSearchReducer
 })
 
 export const setSearch = (search) => {
@@ -66,7 +73,11 @@ export const setSearch = (search) => {
         dispatch({ type: "SET_SEARCH", search })
     }
 }
-
+export const setCampusSearch = (search) => {
+    return async(dispatch) => {
+        dispatch({ type: "SET_SEARCH", search })
+    }
+}
 
 
 export const fetchStudents = () => {
@@ -235,7 +246,7 @@ export const deleteCampus = (campus) => {
     return async(dispatch) => {
         await axios.delete(`/api/campuses/${campus}`)
         dispatch({ type: "DELETE_CAMPUS", campus })
-        toastr.success('Deleted campus', `${campus.name} is now deleted.`)
+        toastr.success('Deleted campus', `Campus is now deleted.`)
     }
 }
 export const createSchool = (efe, history) => {
