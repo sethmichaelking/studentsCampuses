@@ -2,7 +2,8 @@
 import { connect } from 'react-redux'
 import { fetchCampuses, fetchStudents, setCampusSearch } from '../store'
 import React, { Component } from 'react'
-
+import TheModal from './TheModal'
+import CampusesModal from './CampusesModal'
 class CampusSearch extends Component {
     constructor(props){
         super(props)
@@ -77,15 +78,6 @@ class CampusSearch extends Component {
                                     </button>
                                 </span>
                             </div>
-                             {/* <div style={{display: 'inline-block', fontFamily: 'sans-serif'}}> 
-                                <input placeholder="Search by Organization" className='iconSearchHeader' onChange={(e) => setInputVal(e.target.value)} class='iconSearchHeader' style= {{ textIndent: '17px', width: '250px', height: '40px', borderRadius:'10px', boxShadow: 'none', border: 'solid 2px #dee2e6'}} type="search" name="" id="" />  
-                            </div> */}
-                              <div style={{marginRight: '8px', float: 'right'}}> 
-                                {/* insert filter here */}
-                              </div>
-                              <div>
-                                {/* insert filter here */}
-                              </div>
                           </div>
                       </div>
                 </div>

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { connect } from 'react-redux'
 import { fetchCampuses, fetchStudents, setSearch, setTheSelect } from '../store'
 import React, { Component } from 'react'
-
+import TheModal from './TheModal'
 class Filters extends Component {
     constructor(props){
         super(props)
@@ -49,7 +49,7 @@ class Filters extends Component {
               zIndex: '2',
               padding: '0 16px',
               margin: '0px 0px 16px',
-              backgroundColor: 'white'
+              backgroundColor: 'white',
               }}>
                 <div style={{ alignItems: 'center',  marginLeft:'20px', height: '66px', width: '85vw'  }}>
                       <div className="global-filters-top" style={{ display: 'flex', marginTop: '2.8px', height: '56px', justifyContent: 'space-between', width: '100%'}}>
@@ -65,7 +65,7 @@ class Filters extends Component {
                                 WebkitBoxAlign: 'center'
                             }}> 
                              <div className="input-group col-md-4" style={{marginRight: '-38px', marginLeft: '-20px', width: '800px'}}>
-                                <input className="form-control py-2" type="search" placeholder='search students' value={inputVal} onChange={(e) => {this.setState({ inputVal: e.target.value})}} id="example-search-input"></input>
+                                <input style={{maxWidth: '200px'}}className="form-control py-2" type="search" placeholder='search students' value={inputVal} onChange={(e) => {this.setState({ inputVal: e.target.value})}} id="example-search-input"></input>
                                 <span className="input-group-append">
                                     <button className="btn" type="button" disabled={inputVal.length === 0 && showDelete === false ? true : false} style={{border: 'thin solid #dadce5'}} onClick={() => saveInput(inputVal)}>
                                         {inputVal.length > 0 ? 
@@ -78,14 +78,13 @@ class Filters extends Component {
                                     </button>
                                 </span>
                             </div>
-                             {/* <div style={{display: 'inline-block', fontFamily: 'sans-serif'}}> 
-                                <input placeholder="Search by Organization" className='iconSearchHeader' onChange={(e) => setInputVal(e.target.value)} class='iconSearchHeader' style= {{ textIndent: '17px', width: '250px', height: '40px', borderRadius:'10px', boxShadow: 'none', border: 'solid 2px #dee2e6'}} type="search" name="" id="" />  
-                            </div> */}
-                              <div style={{marginRight: '8px', float: 'right'}}> 
-                                {/* insert filter here */}
+                              <div style={{marginRight: '8px', display: 'inline-block'}}> 
+                                <div style={{display: 'inline-block'}}>
+                                    {/* <TheModal style={{float: 'right'}}/> */}
+                                </div>
                               </div>
                               <div>
-                                {/* insert filter here */}
+                              {/* <TheModal/> */}
                               </div>
                           </div>
                       </div>

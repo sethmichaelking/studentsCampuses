@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'
 import { createStudent } from '../store'
+import MediaQuery from 'react-responsive'
 
 class TheModal extends Component {
     constructor(){
@@ -41,15 +42,17 @@ class TheModal extends Component {
     const { show, firstName, lastName, email, gpa, imageUrl, campus } = this.state
     const { campuses } = this.props
     const { handleClose, handleShow } = this
+
     return (
       <div>
            <>
-                <Button style={{ 
-                     marginTop: '-12px',
-                     marginLeft: '410px'
-                 }}variant="primary" onClick={handleShow}>
-                    Create Student
-                </Button>
+           <div>
+                <div>
+                    <Button variant="primary" onClick={handleShow}>
+                            Create Student
+                    </Button> 
+                </div>
+            </div>          
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header>
                     <Modal.Title>Modal heading</Modal.Title>

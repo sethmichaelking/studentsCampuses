@@ -159,9 +159,10 @@ class Campuses extends Component {
             <div>
                 <div>
                 <HeadWrapper>
-                    <div>
+                    <div style={{width: '90vw'}}>
                         <div style={{
                             display: 'inline-block',
+                            width: '92vw'
                             }}>
                             <div style={{
                                 display: 'inline-block',
@@ -170,9 +171,9 @@ class Campuses extends Component {
                             <div style={{
                                 display: 'inline-block',
                                 position: 'relative',
-                                left: '595px',
+                                float: 'right'
                             }}> 
-                                <CampusesModal /> 
+                            <CampusesModal />
                             </div>
                         </div>
                     </div>
@@ -181,72 +182,46 @@ class Campuses extends Component {
                     <div>
                         <GridWrapper>
                         <CampusSearch />
-                        <div style={{
-                                height: '45px',
-                                border: '1px solid #dadce5',
-                                backgroundColor: 'white',
-                                marginBottom: '-10px'
-                            }}>
-                                <div>
-                                    <div style={{display: 'inline-block'}}>
-                                        <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}> Campuses ({campuses.length}) </p>                           
-                                    </div>
-                                    <div style={{display: 'inline-block', float:'right', paddingRight: '10px'}}>
-                                        {/* <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}>  </p>                            */}
+                        <div style={{width: '90vw'}}>
+                            <div style={{
+                                    height: '45px',
+                                    border: '1px solid #dadce5',
+                                    backgroundColor: 'white',
+                                    marginBottom: '-1px'
+                                }}>
+                                    <div>
+                                        <div style={{display: 'inline-block'}}>
+                                            <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}> Campuses ({campuses.length}) </p>                           
+                                        </div>
+                                        <div style={{display: 'inline-block', float:'right', paddingRight: '10px'}}>
+                                            {/* <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}>  </p>                            */}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <Table style={{ 
-                                        backgroundColor: 'white', 
-                                        borderLeft: 'thin solid #dadce5',
-                                        borderRight: 'thin solid #dadce5', borderTop: 'thin solid #dadce5', borderBottom: 'thin solid #dadce5 !important'}} 
-                                        hover>
-                                <thead>
-                                    <tr style={{ borderBottom: 'thin solid #dadce5', backgroundColor: '#f4f4f7', color: '#1a1c25'}}>  
-                                    <th>Campus Name</th>
-                                    <th>Address</th>
-                                    <th>Description</th>
-                                    <th> Students </th>
-                                    <th> Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {displayCampuses(campuses, campusSearch)}
-                                    {/* {campuses.map(campus => {
-                                        return (
-                                            <tr key={campus.id}>
-                                            <td> <Link to={`/campuses/${campus.id}`}> {campus.name} </Link></td>
-                                            <td>{campus.address}</td>
-                                            <td>{campus.description}</td>
-                                            <td> 
-                                                    {campus.students ? campus.students.map(
-                                                        student => {
-                                                            return (
-                                                                <div key={student.id}>
-                                                                    {student.firstName ? <Link to={`/students/${student.id}`}>  {`${student.firstName}`} </Link> : 'loading'} {student.lastName}
-                                                                </div>
-                                                            )
-                                                        }
-                                                    ) : 
-                                                    campus.name
-                                                }
-                                            </td>
-                                            <td>
-                                                <DeleteCampusModal campus={campus}/>
-                                            </td>
-                                        </tr>
-                                        )
-                                    })} */}
-                                    </tbody>
-                                </Table>
-                                <div style={{zIndex: '2'}}>
-                                    <div style={{marginTop: '280px', color: '#6a6c75'}}>
-                                    Created by <span style={{ fontWeight: '600', color: '#6a6c75'}}> Seth King </span>
+                                    <div>
+                                        <Table style={{ 
+                                                    backgroundColor: 'white', 
+                                                    borderLeft: 'thin solid #dadce5',
+                                                    borderRight: 'thin solid #dadce5', borderTop: 'thin solid #dadce5', borderBottom: 'thin solid #dadce5 !important'}} 
+                                                    hover>
+                                            <thead>
+                                                <tr style={{ borderBottom: 'thin solid #dadce5', backgroundColor: '#f4f4f7', color: '#1a1c25'}}>  
+                                                <th>Campus Name</th>
+                                                <th>Address</th>
+                                                <th>Description</th>
+                                                <th style={{textAlign: 'center'}}> Students </th>
+                                                <th> Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {displayCampuses(campuses, campusSearch)}
+                                            </tbody>
+                                            </Table>
                                     </div>
                                 </div>
                             </GridWrapper>
                         </div>
-                  </div>
+                     </div>
                 </div>
             </div>
             <div>

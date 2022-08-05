@@ -60,7 +60,7 @@ class Profile extends Component {
         const { saveEmail, saveLastName, saveFirstName, saveGPA, cancel, savePhone, saveImage} = this
 
       return (
-            <div stlye={{
+            <div style={{
             overflowY: 'hidden',
             overflowX: 'hidden'
                 }}>

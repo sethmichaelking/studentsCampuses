@@ -36,14 +36,13 @@ class CampusesModal extends Component {
     const { show, name, description, imageUrl, address } = this.state
     return (
       <div>
-        <Button variant="primary" onClick={handleShow}
-        style={{
-            marginTop: '-12px',
-            marginLeft: '410px'
-        }}>
-        Create Campus
-        </Button>
-
+        <>
+        <div>
+            <Button variant="primary" onClick={handleShow}
+            >
+            Create Campus
+            </Button>
+        </div>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header>
                 <Modal.Title>Modal heading</Modal.Title>
@@ -66,6 +65,7 @@ class CampusesModal extends Component {
                 </Button>
                 </Modal.Footer>
             </Modal>
+            </>
       </div>
     )
   }

@@ -189,23 +189,25 @@ class Home extends Component {
          <div>
           <GridWrapper>
               <Filters/>  
-                  <div style={{
-                      height: '45px',
-                      border: '1px solid #dadce5',
-                      backgroundColor: 'white',
-                      marginBottom: '-10px'
-                    }}>
-                    <div>
-                        <div style={{display: 'inline-block'}}>
-                            <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}> Students ({students && select.id ? students.filter(student => student.campusId === select.id).length : students.length}) </p>                           
-                        </div>
-                        <div style={{display: 'inline-block', float:'right', paddingRight: '10px'}}>
-                            <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}> 
-                              {/* {students && select.id ? this.average(students.filter(student => student.campusId === select.id)) : select.length > 0 ? this.average(students): students && !select.id ? this.average(students) : 'we have students'} */}
-                              GPA: {students && select ? select.id ? this.averageOneCampusGPA(select, students) : this.average(students) : console.log('there is not select.id')}
-                             </p>                           
-                        </div>
-                     </div>
+              <div style={{width: '90vw'}}>
+                    <div style={{
+                                width: '90vw',
+                                display: 'inline-block',
+                                height: '45px',
+                                border: '1px solid #dadce5',
+                                backgroundColor: 'white',
+                                marginBottom: '-10px !imoprtant'
+                        }}>
+                      <div>
+                          <div style={{display: 'inline-block'}}>
+                              <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}> Students ({students && select.id ? students.filter(student => student.campusId === select.id).length : students.length}) </p>                           
+                          </div>
+                          <div style={{display: 'inline-block', float:'right', paddingRight: '10px'}}>
+                              <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}> 
+                                GPA: {students && select ? select.id ? this.averageOneCampusGPA(select, students) : this.average(students) : console.log('there is not select.id')}
+                              </p>                           
+                          </div>
+                      </div>
                   </div>
                   <Table  
                   style={{ 
@@ -237,6 +239,7 @@ class Home extends Component {
                     console.log('there is no select')}
                   </tbody>
                 </Table>
+                </div>
             </GridWrapper>
              </div>
             </div> 

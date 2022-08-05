@@ -17,6 +17,9 @@ import {
     BsClipboardData 
   } from 'react-icons/bs'
 import StudentSearch from './StudentSearch'
+
+
+
 const HeadWrapper = styled.div`
 display: grid;
 grid-gap: 10px;
@@ -203,35 +206,36 @@ class Students extends Component {
         <div>
             <div> 
                 <HeadWrapper>
-                    <div>
+                    <div style={{width: '90vw'}}>
                         <div style={{
                             display: 'inline-block',
+                            width: '92vw'
                             }}>
                             <div style={{
                                 display: 'inline-block',
                             }}> 
-                            <h2 style={{marginLeft: '1.5em', marginBottom: '15px'}}> Students </h2> </div>
+                                <h2 style={{marginLeft: '1.5em', marginBottom: '15px'}}> Students </h2> 
+                            </div>
                             <div style={{
                                 display: 'inline-block',
                                 position: 'relative',
-                                left: '600px',
+                                float: 'right'
                             }}> 
-                                <TheModal /> 
+                            <TheModal />
                             </div>
                         </div>
                     </div>
                 </HeadWrapper>
                 <div style={{ borderTop:  '1px solid #dadce5', marginTop: '-20px', height: '100vh', backgroundColor: '#f4f4f7'}}>
                     <div>
-                    <GridWrapper>
-                             <div>
-                                <StudentSearch />
-                            </div>
+                        <GridWrapper>
+                        <StudentSearch />
+                        <div style={{width: '90vw'}}>
                             <div style={{
                                 height: '45px',
                                 border: '1px solid #dadce5',
                                 backgroundColor: 'white',
-                                marginBottom: '-10px'
+                                marginBottom: '-1px'
                             }}>
                                 <div>
                                     <div style={{display: 'inline-block'}}>
@@ -269,6 +273,7 @@ class Students extends Component {
                                 } 
                                 </tbody>
                             </Table> 
+                            </div>
                         </GridWrapper>
                       </div>
                     </div>
