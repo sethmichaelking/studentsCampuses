@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'
 import { createStudent } from '../store'
-import MediaQuery from 'react-responsive'
 
 class TheModal extends Component {
     constructor(){

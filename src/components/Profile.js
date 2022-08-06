@@ -62,11 +62,12 @@ class Profile extends Component {
       return (
             <div style={{
             overflowY: 'hidden',
-            overflowX: 'hidden'
+            overflowX: 'hidden',
                 }}>
-                <div style={{ height: "700px", position: "relative"}}>
-                <div style={{maxHeight:"100%", overflow:"auto"}}>
-                  <div className="container">
+               <div style={{ }}>
+                <div style={{ }}>
+                <div style={{ overflow:"auto"}}>
+                  <div className="">
                    <div className="main-body">
                     <nav aria-label="breadcrumb" className="main-breadcrumb">
                       <ol className="breadcrumb">
@@ -276,6 +277,7 @@ class Profile extends Component {
                         </div>
                       </div>
                     </div>
+                  </div>
                   </div>
               </div>
               </div>

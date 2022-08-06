@@ -13,7 +13,7 @@ const GridWrapper = styled.div`
   display: grid;
   grid-gap: 10px;
   margin-top: 1em;
-  margin-left: 5em;
+  margin-left: 8em;
   margin-right: 65em;
 `;
 
@@ -80,13 +80,14 @@ class Campus extends Component {
     }
     return (
       <div>
-        <GridWrapper>
+        <GridWrapper style={{width: '90vw', height: '60vw'}}>
+        <div style={{ width: '90vw' }}>
         <section class="h-13 gradient-custom-2" >
-            <div class="container py-10 h-30">
+            <div class="py-10 h-30">
                 <div class="row d-flex h-100" style={{width: '2300px'}}>
-                <div class="col col-lg- col-xl-7">
+                <div class="">
                     <div class="card" >
-                        <div class="rounded-top text-white d-flex flex-row" style={{backgroundColor: '#000', height: '200px'}}>
+                        <div class="rounded-top text-white d-flex flex-row" style={{backgroundColor: '#000', height: '200px', width: '90vw'}}>
                             <div class="ms-4 mt-5 d-flex flex-column" style={{width: '150px', marginLeft: '20px'}}>
                                 <img src={campus.profilePicture}
                                     alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
@@ -136,7 +137,7 @@ class Campus extends Component {
                                 </p>
                             </div>
                         </div>
-                        <div class="p-4 text-black" style={{backgroundColor: '#f8f9fa'}}>
+                        <div class="p-4 text-black" style={{backgroundColor: '#f8f9fa', width: '90vw'}} >
                             <div class="d-flex justify-content-end text-center py-1">
                             <div>
                                 <p class="mb-1 h5">{campusStudents.length}</p>
@@ -148,7 +149,7 @@ class Campus extends Component {
                             </div> */}
                             </div>
                         </div>
-                        <div class="card-body p-4 text-black">
+                        <div class="card-body p-4 text-black" style={{}}>
                                 <div class="mb-5">
                                 <p class="lead fw-normal mb-1">School Description</p>
                                 <div class="p-4" style={{backgroundColor: '#f8f9fa'}}>
@@ -212,6 +213,7 @@ class Campus extends Component {
                 </div>
             </div>
         </section>
+        </div>
          </GridWrapper>
       </div>
     )
