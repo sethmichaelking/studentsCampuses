@@ -38,9 +38,7 @@ const Campus = conn.define('campus', {
     name: {
         type: STRING
     },
-    imageUrl: {
-        type: STRING
-    },
+
     address: {
         type: STRING
     },
@@ -51,7 +49,8 @@ const Campus = conn.define('campus', {
         type: STRING
     },
     profilePicture: {
-        type: STRING
+        type: STRING,
+        defaultValue: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHHlRhS5_c6i5K2AkR8aPKeF1STQmGFej5_w&usqp=CAU'
     }
 })
 

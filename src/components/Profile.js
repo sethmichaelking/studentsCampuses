@@ -58,7 +58,7 @@ class Profile extends Component {
     render() {
         const { student, campus } = this.props
         const { saveEmail, saveLastName, saveFirstName, saveGPA, cancel, savePhone, saveImage} = this
-
+      console.log(campus)
       return (
             <div style={{
             overflowY: 'hidden',
@@ -86,6 +86,7 @@ class Profile extends Component {
                                 <h4>{student.firstName} {student.lastName}</h4>
                                 <p className="text-secondary mb-1">Major: {student.major || 'Undeclared'}</p>
                                 <p className="text-muted font-size-sm">Location: {student.location || 'No location found'}</p>
+                                <p className="text-muted font-size-sm" style={{marginTop: '-14px'}}>Campus: {campus.name || 'Unenrolled'}</p>
                               </div>
                             </div>
                           </div>

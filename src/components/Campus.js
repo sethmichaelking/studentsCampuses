@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom'
 import { fetchCampuses, fetchStudents, updateAddress, updateThePhoto, updateCampusCity, updateName, updateDescription, updateTheName, removeStudentFromCampus } from '../store'
 import EasyEdit from 'react-easy-edit';
 import styled from 'styled-components';
-import { Table, Button } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import {
     BsClipboardData
   } from 'react-icons/bs'
+import TheModal from './TheModal';
 
 const GridWrapper = styled.div`
   display: grid;
@@ -18,10 +19,12 @@ const GridWrapper = styled.div`
 `;
 
 class Campus extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
-            campusName: ''
+            campusName: '',
+            someStudents: 0,
+            updatePro: 'Update Profile Picture'
         }
         this.save = this.save.bind(this)
         this.cancel = this.cancel.bind(this)
@@ -31,15 +34,14 @@ class Campus extends Component {
         this.updateName = this.updateName.bind(this)
         this.updateCity = this.updateCity.bind(this)
         this.updateProfile = this.updateProfile.bind(this)
-
     }
+
     save(value){
         const filteredStudents = campus.students.filter((student) => student.id !== value)
        this.props.updateCampusName(value, this.props.id, filteredStudents)
     }
     updateCity(value) {
        this.props.updateTheCity(value, this.props.id)
-       value='Update Profile pic'
     }
     updateName(value){
         this.props.newName(value,this.props.id)
@@ -55,6 +57,7 @@ class Campus extends Component {
     }
     updateProfile(value){
         this.props.updateProfilePicture(value, this.props.id)
+        this.setState({ updatePro: 'upadte with url' })
     }
     cancel(){
         console.log(this.state.campusName)
@@ -68,18 +71,11 @@ class Campus extends Component {
         }
     }
   render() {
-    const { students, campuses, campus, campusStudents } = this.props
-    const { save, cancel, saveAddress, updateProfile, updateCity, saveDescription, deleteStudent, updateName } = this
-    const { campusName } = this.state
-    const keys = Object.keys(campusStudents)
-    console.log(campus.city)
-    const bird = []
-    for (let key of keys){
-        let newBird = campusStudents[key]
-        bird.push(newBird)
-    }
+    const { campus, students } = this.props
+    const { cancel, updateProfile, updateCity, deleteStudent, updateName, setTheState } = this
+    const { updatePro} = this.state
     return (
-      <div>
+      <div >
         <GridWrapper style={{width: '90vw', height: '60vw'}}>
         <div style={{ width: '90vw' }}>
         <section class="h-13 gradient-custom-2" >
@@ -103,7 +99,7 @@ class Campus extends Component {
                                         attributes={{ name: "awesome-input", id: 1}}
                                         instructions="Update Campus's Profile picture"
                                         placeholder='Edit Profile Picture'
-                                        value='Update Profile Pic'
+                                        value={updatePro}
                                     />
                                     </div>
                                 </div>
@@ -140,30 +136,44 @@ class Campus extends Component {
                         <div class="p-4 text-black" style={{backgroundColor: '#f8f9fa', width: '90vw'}} >
                             <div class="d-flex justify-content-end text-center py-1">
                             <div>
-                                <p class="mb-1 h5">{campusStudents.length}</p>
-                                <p class="small text-muted mb-0">Students Enrolled</p>
+                                <p class="mb-1 h5"> {campus && students ? students.filter(student => student.campusId === campus.id).length : '0'} </p>
+                                <p class="small text-muted mb-0">Students Enrolled </p>
                             </div>
-                            {/* {/* <div class="px-3">
-                                <p class="mb-1 h5">1026</p>
-                                <p class="small text-muted mb-0">Followers</p>
-                            </div> */}
                             </div>
                         </div>
-                        <div class="card-body p-4 text-black" style={{}}>
+                        <div class="card-body p-4 text-black" style={{height: '60vh'}}>
                                 <div class="mb-5">
-                                <p class="lead fw-normal mb-1">School Description</p>
-                                <div class="p-4" style={{backgroundColor: '#f8f9fa'}}>
-                                    <p class="font-italic mb-1">{campus.description}</p>
-                                </div>
+                                    <p class="lead fw-normal mb-1">School Description</p>
+                                    <div class="p-4" style={{backgroundColor: '#f8f9fa'}}>
+                                        <p class="font-italic mb-1">{campus.description}</p>
+                                    </div>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mb-4">
                                     <p class="lead fw-normal mb-0">Students Enrolled</p>
-                                    {/* <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p> */}
                                 </div>
                                 <div>
-                                    <Table bordered hover>
+                                    <div style={{
+                                        height: '45px',
+                                        border: '1px solid #dadce5',
+                                        backgroundColor: 'white',
+                                        marginBottom: '-1px'
+                                    }}>
+                                    <div>
+                                        <div style={{display: 'inline-block'}}>
+                                                <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}> Students ({campus && students ? students.filter(student => student.campusId === campus.id).length : '0'}) </p>                           
+                                        </div>
+                                        <div style={{display: 'inline-block', float:'right', paddingRight: '10px'}}>
+                                                {/* <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}>  </p>                            */}
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <Table style={{ 
+                                                    backgroundColor: 'white', 
+                                                    borderLeft: 'thin solid #dadce5',
+                                                    borderRight: 'thin solid #dadce5', borderTop: 'thin solid #dadce5', borderBottom: 'thin solid #dadce5'}} 
+                                                    hover>
                                         <thead>
-                                            <tr>
+                                            <tr style={{ borderBottom: 'thin solid #dadce5', backgroundColor: '#f4f4f7', color: '#1a1c25'}}>
                                                 <th>First Name</th>
                                                 <th>Last Name</th>
                                                 <th>GPA </th>
@@ -171,39 +181,69 @@ class Campus extends Component {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        {bird.length > 0 ? bird.map(theStudent => {
-                                            return (
-                                                <tr>
-                                                    <td>{theStudent.firstName}</td>
-                                                    <td> {theStudent.lastName} </td>
-                                                    <td> {theStudent.gpa} </td>
-                                                    <td> 
-                                                        <button 
-                                                        onClick={() => 
-                                                        deleteStudent({studentId: theStudent.id, campusId: theStudent.campusId, students:campus.students.filter((student) => student.id !== theStudent.id)})}> Unregister</button>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        }) : 
-                                        <tr>
+                                            {campus && students ?
+                                              <>
+                                                {students.filter(student => student.campusId === campus.id).length > 0 ? students.filter(student => student.campusId === campus.id).map(thestudent => {
+                                                    return (
+                                                        <tr key={thestudent.id}>
+                                                            <td>
+                                                                <Link to={`/students/${thestudent.id}`}>
+                                                                {thestudent.firstName}
+                                                                </Link>
+                                                            </td>
+                                                            <td>
+                                                                {thestudent.lastName}
+                                                            </td>
+                                                            <td>
+                                                                {thestudent.gpa}
+                                                            </td>
+                                                            <td> 
+                                                                <button 
+                                                                onClick={() => 
+                                                                deleteStudent({
+                                                                    studentId: thestudent.id, 
+                                                                    campusId: thestudent.campusId, 
+                                                                    students: campus.students.filter((student) => student.id !== thestudent.id)
+                                                                })}> Unregister</button>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                }) : 
+                                            <tr>
+                                                <td colSpan={6}>
+                                                <div >
+                                                    <div style= {{ height: '200px'}} > 
+                                                            <div style={{ textAlign: 'center', justifyContent: 'center', marginTop: '150px' }}>
+                                                                <h3>
+                                                                    <BsClipboardData /> Create {campus.name}'s first student
+                                                                </h3>
+                                                                <h5> 
+                                                                     <TheModal />
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>}
+                                              </>
+                                            : 
+                                            <tr>
                                             <td colSpan={6}>
                                             <div >
                                                 <div style= {{ height: '200px'}} > 
                                                         <div style={{ textAlign: 'center', justifyContent: 'center', marginTop: '150px' }}>
                                                             <h3>
-                                                                <BsClipboardData /> No Students Enrolled
+                                                                <BsClipboardData /> Loading Data
                                                             </h3>
                                                             <h5> 
-                                                                <Link to={'/students'}>
-                                                                <Button variant="secondary"> Create Student </Button>
-                                                                </Link> 
+                                                                 <TheModal />
                                                             </h5>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
-                                        }
+                                        } 
                                         </tbody>
                                     </Table>
                                 </div>
@@ -222,12 +262,10 @@ class Campus extends Component {
 const mapState = (state, otherProps) => {
     const id = otherProps.match.params.id * 1
     const campus = state.campuses.find(campus => campus.id === id) || {}
-    const campusStudents = campus.students ? campus.students : {}
     return {
         students: state.students,
         campuses: state.campuses,
         campus,
-        campusStudents,
         id
     }
 }
