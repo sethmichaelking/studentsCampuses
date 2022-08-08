@@ -53,7 +53,7 @@ const searchReducer = (state = [], action) => {
     return state
 }
 const campusSearchReducer = (state = [], action) => {
-    if (action.type === "SET_SEARCH"){
+    if (action.type === "SET_CAMPUS_SEARCH"){
         return action.search
     }
     return state
@@ -75,7 +75,7 @@ export const setSearch = (search) => {
 }
 export const setCampusSearch = (search) => {
     return async(dispatch) => {
-        dispatch({ type: "SET_SEARCH", search })
+        dispatch({ type: "SET_CAMPUS_SEARCH", search })
     }
 }
 

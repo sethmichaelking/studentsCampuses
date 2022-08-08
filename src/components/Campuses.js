@@ -36,10 +36,16 @@ class Campuses extends Component {
     constructor(){
         super()
         this.state = {
-            
+            len: 0
         }
         this.remove = this.remove.bind(this)
         this.displayCampuses = this.displayCampuses.bind(this)
+        this.updateStudentLength = this.updateStudentLength.bind(this)
+    }
+    updateStudentLength(val){
+        if(this.state.len !== val){
+            this.setState({ len: val })
+        }
     }
     remove(campus){
         this.props.removeCampus(campus)
@@ -47,30 +53,30 @@ class Campuses extends Component {
       displayCampuses(campuses, campusSearch){
         if (campuses.length > 0 && campusSearch.length > 0){
             const foundCampus = campuses.filter(campus => campus.name.includes(campusSearch))
-            // const students = this.props.campuses.find(campus => campus.id === foundStudent.campusId)
             if (foundCampus.length > 0){
             console.log('students and search length:', foundCampus.length)
-            // this.updateStudentLength(foundStudent.length)
+            this.updateStudentLength(foundCampus.length)
             return (
                 foundCampus.map(campus => {
-                        // const school = this.props.campuses.find(campus => campus.id === foundStudent.campusId)
+                    const lengthOfStudents = this.props.students.filter(student => student.campusId === campus.id)
                         return (
                             <tr key={campus.id}>
                                 <td> <Link to={`/campuses/${campus.id}`}> {campus.name} </Link> </td>
-                                <td> 
+                                <td>{campus.address}</td>
+                                <td> {campus.description} </td>
+                                <td  style={{textAlign: 'center'}}> {lengthOfStudents.length} </td>
+                                <td style={{textAlign: 'center'}}> 
                                     <>
                                         <DeleteCampusModal campus={campus}/>
                                     </>
                                 </td>
-                                <td>{campus.address}</td>
-                                <td> {campus.gpa} </td>
                             </tr>
                         )
                     })
             )
           } 
           console.log('nobody', 0)
-        //   this.updateStudentLength(0)
+        this.updateStudentLength(0)
           return (
             <>
             <tr style={{borderBottom: 'thin solid #dadce5'}}>
@@ -94,11 +100,10 @@ class Campuses extends Component {
         } 
         else if (campuses.length > 0){
             console.log('campuses length:', campuses.length)
-            // this.updateStudentLength(campuses.length)
+            this.updateStudentLength(campuses.length)
                return (
                 campuses.map(campus => {
                     const studentsLength = this.props.students.filter(student => student.campusId === campus.id)
-                    // const school = this.props.campuses.find(campus => campus.id === student.campusId)
                     console.log(studentsLength)
                     return (
                         <tr key={campus.id}>
@@ -108,7 +113,7 @@ class Campuses extends Component {
                             <td style={{textAlign: 'center'}}>
                                     {studentsLength.length}
                             </td>
-                            <td> 
+                            <td  style={{textAlign: 'center'}}> 
                                 <>
                                     <DeleteCampusModal campus={campus}/>
                                 </>
@@ -120,7 +125,7 @@ class Campuses extends Component {
         } 
         else if (campuses.length === 0){
             console.log('no campuses', campuses.length)
-            // this.updateStudentLength(students.length)
+            this.updateStudentLength(0)
               return (
             <>
             <tr style={{borderBottom: 'thin solid #dadce5'}}>
@@ -152,8 +157,9 @@ class Campuses extends Component {
         }
     }
   render() {
-    const { students, campuses, campusSearch } = this.props
-    const { remove, displayCampuses } = this
+    const { campuses, campusSearch } = this.props
+    const { displayCampuses } = this
+    const { len } = this.state
     return (
       <div>
             <div>
@@ -167,7 +173,7 @@ class Campuses extends Component {
                             <div style={{
                                 display: 'inline-block',
                             }}> 
-                            <h2 style={{marginLeft: '1.5em', marginBottom: '15px'}}> Campuses </h2>                            </div>
+                            <h2 style={{marginLeft: '1.5em', marginBottom: '15px'}}> Campuses </h2> </div>
                             <div style={{
                                 display: 'inline-block',
                                 position: 'relative',
@@ -191,7 +197,7 @@ class Campuses extends Component {
                                 }}>
                                     <div>
                                         <div style={{display: 'inline-block'}}>
-                                            <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}> Campuses ({campuses.length}) </p>                           
+                                            <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}> Campuses ({len}) </p>                           
                                         </div>
                                         <div style={{display: 'inline-block', float:'right', paddingRight: '10px'}}>
                                             {/* <p style={{ textIndent: '10px', fontSize: '18px', marginTop: '7px' }}>  </p>                            */}
@@ -210,7 +216,7 @@ class Campuses extends Component {
                                                 <th>Address</th>
                                                 <th>Description</th>
                                                 <th style={{textAlign: 'center'}}> Students </th>
-                                                <th> Actions</th>
+                                                <th  style={{textAlign: 'center'}}> Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

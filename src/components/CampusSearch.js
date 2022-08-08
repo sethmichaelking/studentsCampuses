@@ -38,7 +38,8 @@ class CampusSearch extends Component {
         }
     }
     render(){
-    const {campuses, selected} = this.props
+    const {campuses, selected, campusSearch} = this.props
+    console.log('cmapus search', campusSearch)
     const { setInputVal, saveInput, clearInput } = this
     const { inputVal, showDelete } = this.state
     return (
@@ -91,6 +92,7 @@ const mapState = (state) => {
     return {
         students: state.students,
         campuses: state.campuses,
+        campusSearch: state.campusSearch
     }
 }
 
