@@ -2,10 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchCampuses, fetchStudents, setTheSelect} from '../store'
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap'
-import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import styled from 'styled-components';
 import Table from 'react-bootstrap/Table';
 import Filters from './Filters';
@@ -13,6 +10,7 @@ import Filters from './Filters';
 import {
   BsClipboardData 
 } from 'react-icons/bs'
+import axios from 'axios'
 
 const GridWrapper = styled.div`
   display: grid;

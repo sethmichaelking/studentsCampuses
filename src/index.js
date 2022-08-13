@@ -5,7 +5,6 @@ import App from './components/App';
 import store from './store'
 import { HashRouter as Router } from 'react-router-dom'
 import ReduxToastr from 'react-redux-toastr'
-// import "rsuite/dist/rsuite.min.css";
 
 const root = createRoot(document.querySelector('#root'));
 root.render(

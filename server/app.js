@@ -1,12 +1,17 @@
+var cookieParser = require('cookie-parser')
 const express = require('express')
 const path = require('path')
 const db = require('../db')
-const { conn, Student, Campus } = db
+const { conn, Student, Campus, User } = db
 const app = express()
+const {OAuth2Client} = require('google-auth-library');
+const client = new OAuth2Client('563448805534-3pp1vdko1578k0uqr0vk5va1sgti026a.apps.googleusercontent.com')
+
 
 app.use("public", express.static(path.join(__dirname, "../public")))
 
 app.use(express.json())
+app.use(cookieParser())
 // static middleware
 app.use('/dist', express.static(path.join(__dirname, '../dist')))
 
@@ -15,7 +20,62 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'))
 }); 
 
-app.delete('/api/students/:id', async (req, res)=> {
+app.post('/api/loginUser', async (req, res)=> {
+  try {
+    const token = req.body.token
+    async function verify() {
+      const ticket = await client.verifyIdToken({
+          idToken: token,
+          audience: '563448805534-3pp1vdko1578k0uqr0vk5va1sgti026a.apps.googleusercontent.com'
+      });
+      const payload = ticket.getPayload();
+      const userid = payload['sub'];
+      console.log('userId', userid, 'payload', payload)
+    }
+    verify().then(()=> {
+      res.cookie('session-token', token)
+      res.send('success')
+    })
+  }
+  catch(err){
+    console.log(err)
+  }
+})
+
+function checkAuthenticated(req, res, next){
+  
+  let token = req.cookies['session-token']
+  const user = {}
+  async function verify(){
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: '563448805534-3pp1vdko1578k0uqr0vk5va1sgti026a.apps.googleusercontent.com'
+    })
+    const payload = ticket.getPayload()
+    user.name = payload.name
+    user.email = payload.email;
+    user.picture = payload.picture
+  }
+  verify()
+    .then(()=> {
+      if (req.user = user){
+      next()
+      }
+    })
+    .catch(err => (
+      console.log(err),
+      res.redirect('/#/login')
+    ))
+}
+
+
+//logs out by removing the cookie from the session then it redirects to the login page
+app.get('/logout', (req, res)=> {
+  res.clearCookie('session-token')
+  res.redirect('/login')
+})
+
+app.delete('/api/students/:id', checkAuthenticated, async (req, res)=> {
   try{
     const student = await Student.findByPk(req.params.id)
     await student.destroy()
@@ -26,7 +86,7 @@ app.delete('/api/students/:id', async (req, res)=> {
   }
 })
 
-app.get('/api/campuses/:id', async(req, res)=> {
+app.get('/api/campuses/:id', checkAuthenticated, async(req, res)=> {
   try {
     const campus = await Campus.findByPk(req.params.id)
     res.send(campus)
@@ -36,7 +96,7 @@ app.get('/api/campuses/:id', async(req, res)=> {
   }
 })
 
-app.put('/api/campuses/:id', async(req, res)=> {
+app.put('/api/campuses/:id', checkAuthenticated, async(req, res)=> {
   try {
     const campus = await Campus.findByPk(req.params.id)
     await campus.update(req.body)
@@ -44,10 +104,11 @@ app.put('/api/campuses/:id', async(req, res)=> {
   }
   catch(err){
     console.log(err)
+    
   }
 })
 
-app.put('/api/students/:id', async(req, res)=> {
+app.put('/api/students/:id', checkAuthenticated, async(req, res)=> {
   try {
     const student = await Student.findByPk(req.params.id)
     await student.update(req.body)
@@ -58,7 +119,7 @@ app.put('/api/students/:id', async(req, res)=> {
   }
 })
 
-app.delete('/api/campuses/:id', async (req, res)=> {
+app.delete('/api/campuses/:id', checkAuthenticated, async (req, res)=> {
   try{
     const campus = await Campus.findByPk(req.params.id)
     await campus.destroy()
@@ -69,7 +130,7 @@ app.delete('/api/campuses/:id', async (req, res)=> {
   }
 })
 
-app.post('/api/students', async(req, res) => {
+app.post('/api/students', checkAuthenticated, async(req, res) => {
   try {
     const student = await Student.create(req.body)
     res.send(student)
@@ -79,7 +140,7 @@ app.post('/api/students', async(req, res) => {
   }
 })
 
-app.post('/api/campuses', async(req, res) => {
+app.post('/api/campuses', checkAuthenticated, async(req, res) => {
   try {
     const campus = await Campus.create(req.body)
     res.send(campus)
@@ -89,7 +150,7 @@ app.post('/api/campuses', async(req, res) => {
   }
 })
 
-app.get('/api/students', async (req, res) => {
+app.get('/api/students', checkAuthenticated, async (req, res) => {
   try {
     const students = await Student.findAll()
     res.send(students)
@@ -100,7 +161,7 @@ app.get('/api/students', async (req, res) => {
 })
 
 
-app.get('/api/campuses', async (req, res) => {
+app.get('/api/campuses', checkAuthenticated, async (req, res) => {
   try {
     const campuses = await Campus.findAll({
       include: {

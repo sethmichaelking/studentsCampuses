@@ -6,8 +6,7 @@ import Home from './Home'
 import Student from './Student'
 import Campus from './Campus'
 import Sidebar from './Sidebar'
-import NavigationBar from './NavigationBar'
-
+import Login from './Login'
 
 export default class App extends Component {
   render() {
@@ -18,6 +17,9 @@ export default class App extends Component {
       }}>
       {/* <NavigationBar /> */}
       <Router>
+      <Switch>
+        <Route exact path='/login' component={Login} />
+        </Switch>
         <Sidebar />
           <Switch>
             <Route path='/home' component = {Home}/>

@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Alert from 'react-bootstrap/Alert';
 import { BrowserRouter as Router, Route, Link, withRouter } from "react-router-dom";
+import { gapi } from "gapi-script";
+import axios from 'axios';
 const StyledSideNav = styled.div`
   position: fixed;     /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
   height: 100%;
@@ -39,23 +41,56 @@ class NavItem extends Component {
 
         }
         this.handleClick = this.handleClick.bind(this)
+        this.signOut = this.signOut.bind(this)
+
     }
     handleClick(){
         const { path, onItemClick } = this.props
         onItemClick(path)
     }
+    async signOut() {
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+        console.log('User signed out.');
+        document.location.href="/#/login";
+      });
+      await axios.get('/logout')
+      res
+    }
+    componentDidMount(){
+
+    }
+    // I decided to comment this out because this is no longer necesary now that I've changed the google script running in index.html that pulls from the google api
+    // componentDidMount(){
+    // //   try{
+    // //   // function onLoad() {
+    // //   //   gapi.load('auth2', function() {
+    // //   //     gapi.auth2.init();
+    // //   //   });
+    // //   }
+    // //   onLoad()
+    // //     .then(()=> {
+
+    // //     })
+    // //  }
+    // //  catch(err){
+    // //   console.log(err)
+    // //  }
+    // }
   render() {
     const { active } = this.props
-    const { handleClick } = this
+    const { handleClick, signOut } = this
     return (
-      <StyledNavItem active={active}> 
+      <StyledNavItem active={this.props.name === 'Logout' ? active === '/#/home' : active}> 
         <Link 
-            to={this.props.path} style={{
-            marginTop: '19px', 
-            fontSize: '35px',
-          }} 
+            to={this.props.path} 
+            style={{
+              marginTop: '19px', 
+              fontSize: '35px',
+            }} 
             className={this.props.css} 
-            onClick={this.handleClick}
+            onClick={this.props.name === 'Logout' ? signOut : handleClick}
+
           >
             <div 
               style={{ 
@@ -63,7 +98,7 @@ class NavItem extends Component {
               fontSize: '12px',
               // textDecoration: 'underline', 
             }}> 
-              {this.props.name} 
+              {this.props.name}
             </div>
         </Link>
       </StyledNavItem>
@@ -88,10 +123,10 @@ class Sidenav extends Component {
               key: 1 /* Key is required, else console throws error. Does this please you Mr. Browser?! */
             },
             {
-                path: '/students',
-                name: 'Students',
-                css: 'fa fa-fw fa-industry',
-                key: 2
+              path: '/students',
+              name: 'Students',
+              css: 'fa fa-fw fa-industry',
+              key: 2
               },
             {
               path: '/campuses',
@@ -99,11 +134,15 @@ class Sidenav extends Component {
               css: 'fa fa-fw fa-folder',
               key: 3
             },
+            {
+              path: '/login',
+              name: 'Logout',
+              css: 'fa fa-fw fa-arrow-right-from-bracket',
+              key: 4
+            },
           ]
         }  
-
-
-        this.onItemClick = this.onItemClick.bind(this)
+      this.onItemClick = this.onItemClick.bind(this)
     } 
 
     onItemClick = (path) => {

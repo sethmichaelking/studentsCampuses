@@ -34,6 +34,30 @@ const Student = conn.define('student', {
     }
 })
 
+const User = conn.define('user', {
+    userId: {
+        type: STRING
+    },
+    email: {
+        type: STRING
+    },
+    name: {
+        type: STRING
+    },
+    picture: {
+        type: STRING
+    },
+    given_name: {
+        type: STRING
+    },
+    family_name: {
+        type: STRING
+    },
+    locale: {
+        type: STRING
+    }
+})
+
 const Campus = conn.define('campus', {
     name: {
         type: STRING
@@ -66,5 +90,6 @@ Student.beforeCreate(student => {
 module.exports = {
     conn,
     Campus,
-    Student
+    Student,
+    User
 }

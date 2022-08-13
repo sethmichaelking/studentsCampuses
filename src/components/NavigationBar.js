@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Component } from 'react'
 import { fetchCampuses, fetchStudents } from '../store';
 import { Link } from 'react-router-dom';
-import SearchBar from './SearchBar';
 const Styles = styled.div`
   .navbar { 
     background-color: #222; 

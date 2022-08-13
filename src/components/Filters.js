@@ -1,4 +1,3 @@
-import { InputPicker, DateRangePicker } from 'rsuite'
 import { useState } from 'react'
 import { connect } from 'react-redux'
 import { fetchCampuses, fetchStudents, setTheSelect } from '../store'

@@ -82,9 +82,14 @@ export const setCampusSearch = (search) => {
 
 export const fetchStudents = () => {
     return async(dispatch) => {
+        try{
         const response = await axios.get('/api/students')
         const students = response.data
         dispatch({ type: "SET_STUDENTS", students })
+        }
+        catch(err){
+            console.log(err)
+        }
     }
 }
 
@@ -92,6 +97,7 @@ export const fetchCampuses = () => {
     return async(dispatch) => {
         const response = await axios.get('/api/campuses')
         const campuses = response.data
+        if (campuses)
         dispatch({ type: "SET_CAMPUSES", campuses })
     }
 }
