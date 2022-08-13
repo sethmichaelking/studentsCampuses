@@ -4,6 +4,7 @@ import Alert from 'react-bootstrap/Alert';
 import { BrowserRouter as Router, Route, Link, withRouter } from "react-router-dom";
 import { gapi } from "gapi-script";
 import axios from 'axios';
+
 const StyledSideNav = styled.div`
   position: fixed;     /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
   height: 100%;
@@ -58,7 +59,10 @@ class NavItem extends Component {
       res
     }
     componentDidMount(){
-
+      // this.props.path === '/home'
+      // this.props.active === '/home'
+      this.props.onItemClick('/home')
+      console.log('click on Home icon to set it as on once you are logged in and set to the home page')
     }
     // I decided to comment this out because this is no longer necesary now that I've changed the google script running in index.html that pulls from the google api
     // componentDidMount(){

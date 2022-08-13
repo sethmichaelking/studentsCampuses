@@ -65,7 +65,7 @@ const reducer = combineReducers({
     toastr: toastrReducer,
     selected: filterSelect,
     search: searchReducer,
-    campusSearch: campusSearchReducer
+    campusSearch: campusSearchReducer,
 })
 
 export const setSearch = (search) => {
@@ -97,7 +97,6 @@ export const fetchCampuses = () => {
     return async(dispatch) => {
         const response = await axios.get('/api/campuses')
         const campuses = response.data
-        if (campuses)
         dispatch({ type: "SET_CAMPUSES", campuses })
     }
 }

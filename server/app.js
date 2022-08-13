@@ -59,11 +59,11 @@ function checkAuthenticated(req, res, next){
   verify()
     .then(()=> {
       if (req.user = user){
-      next()
-      }
+      return next()
+      } 
     })
     .catch(err => (
-      console.log(err),
+      console.log('did not authenticate', err),
       res.redirect('/#/login')
     ))
 }
