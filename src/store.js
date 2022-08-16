@@ -59,6 +59,13 @@ const campusSearchReducer = (state = [], action) => {
     return state
 }
 
+const authenticationReducer = (state = [], action) => {
+    if (action.type === "SET_AUTH_TRUE"){
+        return action.user
+    }
+    return state
+}
+
 const reducer = combineReducers({
     campuses: campusReducer,
     students: studentReducer,
@@ -66,7 +73,17 @@ const reducer = combineReducers({
     selected: filterSelect,
     search: searchReducer,
     campusSearch: campusSearchReducer,
+    isAuthenticated: authenticationReducer
 })
+
+export const setAuthTrue = (email) => {
+    return async(dispatch) => {
+        const response = await axios.get('/users')
+        const users = response.data
+        let user = users.filter(user => user.email === email)
+        dispatch({ type: 'SET_AUTH_TRUE', user })
+    }
+}
 
 export const setSearch = (search) => {
     return async(dispatch) => {

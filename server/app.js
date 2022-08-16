@@ -1,10 +1,11 @@
-var cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 const express = require('express')
 const path = require('path')
 const db = require('../db')
 const { conn, Student, Campus, User } = db
 const app = express()
 const {OAuth2Client} = require('google-auth-library');
+const { default: axios } = require('axios')
 const client = new OAuth2Client('563448805534-3pp1vdko1578k0uqr0vk5va1sgti026a.apps.googleusercontent.com')
 
 
@@ -12,6 +13,7 @@ app.use("public", express.static(path.join(__dirname, "../public")))
 
 app.use(express.json())
 app.use(cookieParser())
+
 // static middleware
 app.use('/dist', express.static(path.join(__dirname, '../dist')))
 
@@ -30,7 +32,6 @@ app.post('/api/loginUser', async (req, res)=> {
       });
       const payload = ticket.getPayload();
       const userid = payload['sub'];
-      console.log('userId', userid, 'payload', payload)
     }
     verify().then(()=> {
       res.cookie('session-token', token)
@@ -55,27 +56,45 @@ function checkAuthenticated(req, res, next){
     user.name = payload.name
     user.email = payload.email;
     user.picture = payload.picture
+    const signedInUser = await User.findOne({ where: { email: user.email } })
+    if (signedInUser === null){
+      await User.create({
+            email: user.email,
+            name: user.name,
+            picture: user.picture,
+          })
+    } 
+      else {
+      console.log('user is already here, no need to add them in')
+    }
   }
   verify()
-    .then(()=> {
+    .then(async ()=> {
       if (req.user = user){
       return next()
       } 
     })
-    .catch(err => (
-      console.log('did not authenticate', err),
-      res.redirect('/#/login')
-    ))
+    .catch(err => {
+      //the below redirect isn't working?
+      console.log('failed authenticatation of user')
+      return res.status(200).redirect('/#/login');
+    })
 }
 
 
-//logs out by removing the cookie from the session then it redirects to the login page
+//logs out by removing the cookie from the session then it redirects to the login page, doesn't seem like it is always clearing the cookie though
 app.get('/logout', (req, res)=> {
   res.clearCookie('session-token')
-  res.redirect('/login')
+  res.clearCookie['session-token']
+  return res.status(200).redirect('/#/login');
 })
 
-app.delete('/api/students/:id', checkAuthenticated, async (req, res)=> {
+app.get('/users', async (req, res)=> {
+  let users = await User.findAll()
+  res.send(users)
+})
+
+app.delete('/api/students/:id', async (req, res)=> {
   try{
     const student = await Student.findByPk(req.params.id)
     await student.destroy()
@@ -86,7 +105,7 @@ app.delete('/api/students/:id', checkAuthenticated, async (req, res)=> {
   }
 })
 
-app.get('/api/campuses/:id', checkAuthenticated, async(req, res)=> {
+app.get('/api/campuses/:id', async(req, res)=> {
   try {
     const campus = await Campus.findByPk(req.params.id)
     res.send(campus)
@@ -96,7 +115,7 @@ app.get('/api/campuses/:id', checkAuthenticated, async(req, res)=> {
   }
 })
 
-app.put('/api/campuses/:id', checkAuthenticated, async(req, res)=> {
+app.put('/api/campuses/:id', async(req, res)=> {
   try {
     const campus = await Campus.findByPk(req.params.id)
     await campus.update(req.body)
@@ -104,11 +123,10 @@ app.put('/api/campuses/:id', checkAuthenticated, async(req, res)=> {
   }
   catch(err){
     console.log(err)
-    
   }
 })
 
-app.put('/api/students/:id', checkAuthenticated, async(req, res)=> {
+app.put('/api/students/:id', async(req, res)=> {
   try {
     const student = await Student.findByPk(req.params.id)
     await student.update(req.body)
@@ -119,7 +137,7 @@ app.put('/api/students/:id', checkAuthenticated, async(req, res)=> {
   }
 })
 
-app.delete('/api/campuses/:id', checkAuthenticated, async (req, res)=> {
+app.delete('/api/campuses/:id', async (req, res)=> {
   try{
     const campus = await Campus.findByPk(req.params.id)
     await campus.destroy()
@@ -130,7 +148,7 @@ app.delete('/api/campuses/:id', checkAuthenticated, async (req, res)=> {
   }
 })
 
-app.post('/api/students', checkAuthenticated, async(req, res) => {
+app.post('/api/students', async(req, res) => {
   try {
     const student = await Student.create(req.body)
     res.send(student)
@@ -140,7 +158,7 @@ app.post('/api/students', checkAuthenticated, async(req, res) => {
   }
 })
 
-app.post('/api/campuses', checkAuthenticated, async(req, res) => {
+app.post('/api/campuses', async(req, res) => {
   try {
     const campus = await Campus.create(req.body)
     res.send(campus)
@@ -157,11 +175,12 @@ app.get('/api/students', checkAuthenticated, async (req, res) => {
   }
   catch(err){
     console.log(err)
+    return res.status(200).redirect('/#/login');
   }
 })
 
 
-app.get('/api/campuses', checkAuthenticated, async (req, res) => {
+app.get('/api/campuses', async (req, res) => {
   try {
     const campuses = await Campus.findAll({
       include: {

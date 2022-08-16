@@ -35,8 +35,8 @@ const Student = conn.define('student', {
 })
 
 const User = conn.define('user', {
-    userId: {
-        type: STRING
+    sub: {
+        type: INTEGER
     },
     email: {
         type: STRING

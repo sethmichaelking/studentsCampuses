@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components';
 import axios from 'axios';
 import { gapi } from "gapi-script";
-
+import { connect } from 'react-redux';
+import { setAuthTrue } from '../store'
 const GridWrapper = styled.div`
   display: grid;
   grid-gap: 10px;
@@ -15,12 +16,14 @@ const GridWrapper = styled.div`
 const color1 = "#A77AFF";
 const color2 = "#B408A4";
 
-export default class Login extends Component {
+class Login extends Component {
     constructor(){
         super();
         this.state = {
             welcomeMsg: '',
-            subHeaderMsg: ''
+            subHeaderMsg: '',
+            user: '',
+            loading: false
         }
         this.onSignIn = this.onSignIn.bind(this)
         this.signOut = this.signOut.bind(this)
@@ -39,24 +42,29 @@ export default class Login extends Component {
         // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
         // console.log('Name: ' + profile.getName());
         // console.log('Image URL: ' + profile.getImageUrl());
+        //we'll use the below email onSigIn to then find the user in the datbase after their authed 
         // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+        const email = profile.getEmail()
+        this.setState({ user: email })
+        console.log('email', email)
         var id_token = googleUser.getAuthResponse().id_token;
         async function send(){
            const response = await axios.post('/api/loginUser', {token: id_token})
            if (response.data === 'success'){
+            location.assign('/#/home')
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function () {
             console.log('User signed out.');
             });
-            location.assign('/#/home')
            }
         }
         send()
+            .then(async()=> {
+                this.props.authenticated(email)
+            })
     }
 
-
-    componentDidMount() {
-        
+    componentDidMount() {   
         console.log('this mounted')
         gapi.signin2.render('my-signin2', {
             'scope': 'profile email',
@@ -72,22 +80,18 @@ export default class Login extends Component {
         });
         const datad = new Date()
         let hrs = datad.getHours()
-        console.log(hrs)
+
         if (hrs >= 10 && hrs <= 19){
-            console.log('its the afternoone')
             this.setState({ welcomeMsg: 'Good Afternoon!' })
             this.setState({ subHeaderMsg: 'Do students learn better after lunch? Find out.' })
 
         }
         if (hrs >= 19 && hrs < 24){
-            console.log('its nightime')
             this.setState({ welcomeMsg: 'Wait, why are you not sleeping?' })
             this.setState({ subHeaderMsg: 'Student are asleep. Finally you can get work done.' })
 
-
         }
         if (hrs >= 0 && hrs <= 10){
-            console.log('itrs morning')
             this.setState({ welcomeMsg: 'Get your morning coffee, it is time to go' })
             this.setState({ subHeaderMsg: 'Early bird gets the worm, right?' })
 
@@ -95,7 +99,6 @@ export default class Login extends Component {
     }
    render() {
     const { welcomeMsg, subHeaderMsg } = this.state
-    console.log('welcome', welcomeMsg, 'sub', subHeaderMsg)
     return (
       <div style={{height: '100vh', width: '100vw'}}>
         <GridWrapper>
@@ -148,13 +151,17 @@ export default class Login extends Component {
                     </div>
                 </div>
         </section>
-        {/* <div>
-            <div>Hi</div>
-            <div id="my-signin2"></div>
-        </div> */}
         </GridWrapper>
       </div>
     )
   }
 }
 
+const mapDispatch = (dispatch) => {
+    return {
+        authenticated: (email) => 
+            dispatch(setAuthTrue(email))
+    }
+}
+
+export default connect(null, mapDispatch)(Login)

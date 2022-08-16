@@ -6,11 +6,14 @@ import { Button } from 'react-bootstrap'
 import styled from 'styled-components';
 import Table from 'react-bootstrap/Table';
 import Filters from './Filters';
+import LoadingIcons from 'react-loading-icons'
+import { Bars } from 'react-loading-icons'
 
 import {
   BsClipboardData 
 } from 'react-icons/bs'
 import axios from 'axios'
+
 
 const GridWrapper = styled.div`
   display: grid;
@@ -46,7 +49,7 @@ class Home extends Component {
   constructor(){
     super()
     this.state = {
-
+      loading: false
     }
     this.average = this.average.bind(this)
     this.averageOneCampusGPA = this.averageOneCampusGPA.bind(this)
@@ -171,6 +174,14 @@ class Home extends Component {
   componentDidMount(){
     try {
       this.props.load()
+      this.setState({ 
+        loading: true
+      })
+      setTimeout(()=> {
+          this.setState({ 
+            loading: false
+          })
+      }, 1000)
     }
     catch(err){
       console.log(err)
@@ -178,6 +189,7 @@ class Home extends Component {
   }
   render() {
     const { students, campuses, select } = this.props
+    const { loading } = this.state
     return (
       <div>
        <HeadWrapper >
@@ -226,12 +238,36 @@ class Home extends Component {
                   select.id ? 
                   <>
                       {/* get one campusStudents */}
-                      {this.getOneCampusStudents(students, select)}
+                      { loading ? 
+                <tr style={{borderBottom: 'thin solid #dadce5'}}>
+                <td colSpan={6} style={{ borderBottom: 'thin solid #dadce5' }}>
+                  <div >
+                      <div style= {{ height: '200px', width: '87vw'}} > 
+                              <div style={{ textAlign: 'center', justifyContent: 'center', marginTop: '150px' }}>
+                                  <h3>
+                                  <Bars  stroke="#ff0000" fill='#F88379' strokeOpacity={.125}/>
+                                  </h3>
+                              </div>
+                        </div>
+                     </div>
+                  </td>
+              </tr> : this.getOneCampusStudents(students, select)}
                   </>
                   : 
                   <>
-                      {/* get all students */}
-                        {this.getAllStudents(students, select)}
+                { loading ?       <tr style={{borderBottom: 'thin solid #dadce5'}}>
+                <td colSpan={6} style={{ borderBottom: 'thin solid #dadce5' }}>
+                  <div >
+                      <div style= {{ height: '200px', width: '87vw'}} > 
+                              <div style={{ textAlign: 'center', justifyContent: 'center', marginTop: '150px' }}>
+                                  <h3>
+                                    <Bars stroke="#ff0000" fill='#F88379' strokeOpacity={.125}/>
+                                  </h3>
+                              </div>
+                        </div>
+                     </div>
+                  </td>
+              </tr> : this.getAllStudents(students, select)}
                   </>
                   : 
                     console.log('there is no select')}
@@ -247,7 +283,6 @@ class Home extends Component {
 }
 
 const mapState = (state, otherProps) => {
-  console.log(otherProps)
   return {
       students: state.students.sort((a,b) => b.gpa - a.gpa),
       campuses: state.campuses.sort((a,b) => a.id - b.id),
@@ -264,69 +299,3 @@ const mapDispatch = (dispatch) => {
 }
 
 export default connect(mapState, mapDispatch)(Home)
-
-
-
-
-
-
-
-
-
-
-{/* {students && select.id ? students
-                  .filter(student => student.campusId === select.id).map(student => {
-                    const school = campuses.find(campus => campus.id === student.campusId)
-                      return (
-                        <tr key={student.id}>
-                          <td key={student.id}>
-                            <Link to={`/students/${student.id}`}> {student.firstName}  </Link>
-                          </td>
-                          <td>
-                            {student.lastName}
-                          </td>
-                          <td>{school ?  <Link to={`/campuses/${school.id}`}> {`${school.name}`} </Link> : 'Not enrolled'}</td>
-                          <td>
-                            {student.gpa}
-                          </td>
-                        </tr>
-                      )
-                    }) : students && students.length > 0 ? students.map(student => {
-                      const school = campuses.find(campus => campus.id === student.campusId)
-                        return (
-                          <tr key={student.id}>
-                            <td key={student.id}>
-                              <Link to={`/students/${student.id}`}> {student.firstName}  </Link>
-                            </td>
-                            <td>
-                              {student.lastName}
-                            </td>
-                            <td>{school ?  <Link to={`/campuses/${school.id}`}> {`${school.name}`} </Link> : 'Not enrolled'}</td>
-                            <td>
-                              {student.gpa}
-                            </td>
-                          </tr>
-                        )
-                      }) : 
-                      students.map(student => {
-                        const school = campuses.find(campus => campus.id === student.campusId)
-                          return (
-                            <tr key={student.id}>
-                              {school.id}
-                            </tr>
-                          )
-                        })
-                  } */}
-
-
-
-  // componentDidUpdate(prevProps){
-  //   try{
-  //     if (prevProps.id === undefined){
-  //       console.log('dispatch set')
-  //     }
-  //   }
-  //   catch(err){
-  //     console.log(err)
-  //   }
-  // }
