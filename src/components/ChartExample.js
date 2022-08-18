@@ -1,30 +1,44 @@
 import React, { Component } from 'react'
 import Chart from 'react-apexcharts'
 import { connect } from 'react-redux';
-
 import { fetchCampuses, fetchStudents, deleteCampus } from '../store'
 
 class ChartExample extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ans: ''
+            campuses: ''
         }
       }
-
+    findStudentTotal(){
+        const temp = []
+        for (let i = 0; i < this.state.campuses.length; i++ ){
+            let campus = this.state.campuses[i]
+            if (campus.students){
+                temp.push(campus.students.length)
+            } 
+            else if (campus.students === undefined){
+                temp.push(0)
+            }
+        }
+        console.log('temp', temp)
+        return temp
+    }
     componentDidMount(){
        this.props.load()
-       this.setState({ ans: this.props.campuses },()=>{
-        console.log('on mount', this.state.ans);
+       this.setState({ campuses: this.props.campuses },()=>{
+        console.log('on mount', this.state.campuses);
       });
     }
     componentDidUpdate(prevProps){
     if(prevProps.campuses.length === 0 && this.props.campuses.length > 0){
-        this.setState({ ans: this.props.campuses },()=>{
-            console.log('on render', this.state.ans);
+        this.setState({ campuses: this.props.campuses },()=>{
+            console.log('on render', this.state.campuses);
         });
+      }
+      //if the length of a campus's students key changed update the campuses
+  
     }
-  }
 
     render() {
         console.log('campuses', this.props.campuses)
@@ -37,20 +51,9 @@ class ChartExample extends Component {
               categories: this.props.campuses.map(campus=> campus.name)
             },
           }
-        const temp = []
-        for (let i = 0; i < this.state.ans.length; i++ ){
-            let campus = this.state.ans[i]
-            if (campus.students){
-                temp.push(campus.students.length)
-            } 
-            else if (campus.students === undefined){
-                temp.push(0)
-            }
-        }
-        console.log('temp', temp)
         const series = [{
             name: 'Total students enrolled',
-            data: temp
+            data: this.findStudentTotal()
         }]
         return (
         <div style={{backgroundColor: 'white', width: '90vw'}}>
