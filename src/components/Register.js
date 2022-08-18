@@ -7,7 +7,6 @@ import { setAuthTrue } from '../store'
 import { Button } from 'react-bootstrap'
 import {registerUser} from '../store'
 import { Link } from 'react-router-dom';
-import { loginUser } from '../store'
 
 const GridWrapper = styled.div`
   display: grid;
@@ -21,7 +20,7 @@ const GridWrapper = styled.div`
 const color1 = "#A77AFF";
 const color2 = "#B408A4";
 
-class Login extends Component {
+class Register extends Component {
     constructor(){
         super();
         this.state = {
@@ -35,13 +34,7 @@ class Login extends Component {
         this.onSignIn = this.onSignIn.bind(this)
         this.signOut = this.signOut.bind(this)
         this.register = this.register.bind(this)
-        this.loginUser = this.loginUser.bind(this)
-    }
-    loginUser(){
-        const userCredentials = ({ email: this.state.email, password: this.state.password })
-        this.props.login(userCredentials)
-        this.setState({ email: '' })
-        this.setState({ password: '' })
+        // this.handleTime = this.handleTime.bind(this)
     }
     register(e){
         e.preventDefault()
@@ -107,7 +100,7 @@ class Login extends Component {
         }
         if (hrs >= 19 && hrs < 24){
             this.setState({ welcomeMsg: 'Wait, why are you not sleeping?' })
-            this.setState({ subHeaderMsg: 'Student are asleep. Finally you can get work, done.' })
+            this.setState({ subHeaderMsg: 'Student are asleep. Finally you can get work done.' })
 
         }
         if (hrs >= 0 && hrs <= 10){
@@ -118,7 +111,7 @@ class Login extends Component {
     }
    render() {
     const { welcomeMsg, subHeaderMsg, email, password } = this.state
-    const { register, loginUser } = this
+    const { register } = this
     return (
       <div style={{height: '100vh', width: '100vw'}}>
         <GridWrapper>
@@ -134,8 +127,8 @@ class Login extends Component {
 
                             <div className="mb-md-5 mt-md-4 pb-5">
 
-                            <h2 className="fw-bold mb-2">{welcomeMsg}</h2>
-                            <p className="text-white-50 mb-5">{subHeaderMsg}</p>
+                            <h2 className="fw-bold mb-2"> Create Account</h2>
+                            <p className="text-white-50 mb-5">Enter email and password below</p>
 
                             <div className="form-outline form-white mb-4">
                                 <input placeholder='Email' value={email} onChange={(e)=> this.setState({ email: e.target.value })} type="email" id="typeEmailX" className="form-control form-control-lg" />
@@ -145,18 +138,16 @@ class Login extends Component {
                                 <input placeholder='Password' value={password} onChange={(e)=> this.setState({ password: e.target.value })} type="password" id="typePasswordX" className="form-control form-control-lg" />
                             </div>
                              <div>
-                                <div style={{display: 'inline-block', marginRight: '4%' }}>
-                                    <Button style={{color: 'black', width: '111%', marginRight: '13px'}} onClick={() => loginUser()}>  Login  </Button>
+                                <div style={{display: 'inline-block', marginRight: '4%'}}>
+                                        <Button variant="light" onClick={(e) => register(e) }> Register </Button>
                                 </div>
-                                <div style={{display: 'inline-block', marginRight: '10px'}}>
-                                    <Button variant="light"> 
-                                        <Link to='/register'> Register   </Link>
+                                <div style={{display: 'inline-block'}}>
+                                    <Button style={{width: '130%'}}> 
+                                        <Link to='/login' style={{color: 'black'}}> Login   </Link>
                                     </Button>
                                 </div>
                             </div>
-                            <p style={{
-                                marginTop: '3%'
-                            }} className="small mb-5 pb-lg-2"><a className="text-white-50" href="#!">Forgot password?</a></p>
+                            <p className="small mb-5 pb-lg-2"><a className="text-white-50" href="#!">Forgot password?</a></p>
                                 <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
                                     <div>
                                         <div id="my-signin2" data-width="300" data-height="200" data-longtitle="true"> </div>
@@ -181,12 +172,6 @@ class Login extends Component {
   }
 }
 
-const mapState = (state) => {
-    return {
-        user: state.loggedInUser
-    }
-}
-
 const mapDispatch = (dispatch) => {
     return {
     authenticated: (email) => {
@@ -194,11 +179,8 @@ const mapDispatch = (dispatch) => {
     },
     register: (user) => {
         dispatch(registerUser(user))
-    },
-    login: (user) => {
-        dispatch(loginUser(user))
     }
   }
 }
 
-export default connect(null, mapDispatch)(Login)
+export default connect(null, mapDispatch)(Register)

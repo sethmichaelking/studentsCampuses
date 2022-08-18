@@ -58,7 +58,6 @@ class Profile extends Component {
     render() {
         const { student, campus } = this.props
         const { saveEmail, saveLastName, saveFirstName, saveGPA, cancel, savePhone, saveImage} = this
-      console.log(campus)
       return (
             <div style={{
             overflowY: 'hidden',

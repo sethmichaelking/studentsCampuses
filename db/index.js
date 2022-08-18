@@ -39,7 +39,13 @@ const User = conn.define('user', {
         type: INTEGER
     },
     email: {
-        type: STRING
+        type: STRING,
+        allowNull: false,
+        unique: true
+    },
+    password:{
+        type: STRING,
+        allowNull: false
     },
     name: {
         type: STRING
@@ -62,7 +68,6 @@ const Campus = conn.define('campus', {
     name: {
         type: STRING
     },
-
     address: {
         type: STRING
     },

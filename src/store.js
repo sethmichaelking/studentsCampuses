@@ -66,6 +66,13 @@ const authenticationReducer = (state = [], action) => {
     return state
 }
 
+const loginReducer = (state = [], action) => {
+    if (action.type === "LOGIN_SUCCESS"){
+        return action.signedInUser
+    }
+    return state
+}
+
 const reducer = combineReducers({
     campuses: campusReducer,
     students: studentReducer,
@@ -73,7 +80,8 @@ const reducer = combineReducers({
     selected: filterSelect,
     search: searchReducer,
     campusSearch: campusSearchReducer,
-    isAuthenticated: authenticationReducer
+    isAuthenticated: authenticationReducer,
+    loggedInUser: loginReducer,
 })
 
 export const setAuthTrue = (email) => {
@@ -85,6 +93,22 @@ export const setAuthTrue = (email) => {
     }
 }
 
+export const loginUser = (user) => {
+    return async(dispatch) => {
+        const response = await axios.post('/login', user)
+        const data = response.data
+        const signedInUser = data.user
+        dispatch({ type: "LOGIN_SUCCESS", signedInUser})
+    }
+}
+
+export const registerUser = (user) => {
+    return async(dispatch) => {
+        const email = user.email
+        const password = user.password
+        const response = await axios.post('/register', user)
+    }
+}
 export const setSearch = (search) => {
     return async(dispatch) => {
         dispatch({ type: "SET_SEARCH", search })
@@ -276,8 +300,7 @@ export const createSchool = (efe, history) => {
         const response = await axios.post('/api/campuses', efe)
         const school = response.data
         dispatch({ type: "CREATE_SCHOOL", school })
-        history.push(`/campuses/${school.id}`)
-        toastr.success('Created campus', `${campus.name} has been created.`)
+        toastr.success('Created campus', 'Campus has been created.')
     }
 }
 

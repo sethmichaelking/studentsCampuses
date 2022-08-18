@@ -7,8 +7,8 @@ const app = express()
 const {OAuth2Client} = require('google-auth-library');
 const { default: axios } = require('axios')
 const client = new OAuth2Client('563448805534-3pp1vdko1578k0uqr0vk5va1sgti026a.apps.googleusercontent.com')
-
-
+const bcrypt = require('bcrypt')
+const { createToken } = require('./JWT')
 app.use("public", express.static(path.join(__dirname, "../public")))
 
 app.use(express.json())
@@ -22,6 +22,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'))
 }); 
 
+//this is for googleSignIn users
 app.post('/api/loginUser', async (req, res)=> {
   try {
     const token = req.body.token
@@ -81,17 +82,75 @@ function checkAuthenticated(req, res, next){
     })
 }
 
+app.post('/register', (req, res)=> {
+  const { email, password } = req.body
+  bcrypt.hash(password, 10).then((hash) => {
+    User.create({
+      email: email,
+      password: hash
+    }).then(()=> {
+      console.log('user is registered')
+      return res.status(200).redirect('/users')
+    }).catch((err)=> {
+      if (err){
+        console.log(err)
+      }
+    })
+  })
+})
+
+app.post('/login', async(req, res)=> {
+  const { email, password } = req.body
+  const user = await User.findOne({
+    where: {
+      email: email
+    }
+  })
+  if (!user){
+    console.log('user not found')
+  }
+  const dbPassword = user.password
+  bcrypt.compare(password, dbPassword).then((match) => {
+    if (!match){
+      console.log('user combination is wrong')
+    } else {
+      const accessToken = createToken(user)
+      res.cookie("login-token", accessToken)
+      console.log('access token', accessToken, {
+        expires: new Date(Date.now() + 9999999),
+        httpOnly: true
+      })
+      res.status(200).send({ user, token: accessToken })
+      console.log('logged in!')
+    }
+  })
+})
 
 //logs out by removing the cookie from the session then it redirects to the login page, doesn't seem like it is always clearing the cookie though
 app.get('/logout', (req, res)=> {
   res.clearCookie('session-token')
   res.clearCookie['session-token']
+  res.clearCookie('login-token')
+  res.clearCookie['login-token']
   return res.status(200).redirect('/#/login');
 })
 
 app.get('/users', async (req, res)=> {
   let users = await User.findAll()
   res.send(users)
+})
+
+app.get('/user', async(req, res)=> {
+  try {
+    let user = await User.findOne({
+      where: {
+
+      }
+    })
+  }
+  catch(err){
+    console.log(err)
+  }
 })
 
 app.delete('/api/students/:id', async (req, res)=> {
@@ -168,7 +227,7 @@ app.post('/api/campuses', async(req, res) => {
   }
 })
 
-app.get('/api/students', checkAuthenticated, async (req, res) => {
+app.get('/api/students', async (req, res) => {
   try {
     const students = await Student.findAll()
     res.send(students)
@@ -178,6 +237,7 @@ app.get('/api/students', checkAuthenticated, async (req, res) => {
     return res.status(200).redirect('/#/login');
   }
 })
+
 
 
 app.get('/api/campuses', async (req, res) => {

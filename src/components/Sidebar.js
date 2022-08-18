@@ -144,10 +144,16 @@ class Sidenav extends Component {
               key: 3
             },
             {
+              path: '/analytics',
+              name: 'Analytics',
+              css: 'fa-solid fa-chart-line',
+              key: 4
+            },
+            {
               path: '/login',
               name: 'Logout',
               css: 'fa fa-fw fa-arrow-right-from-bracket',
-              key: 4
+              key: 5
             },
           ]
         }  

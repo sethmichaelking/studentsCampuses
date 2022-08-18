@@ -54,7 +54,6 @@ class Campuses extends Component {
         if (campuses.length > 0 && campusSearch.length > 0){
             const foundCampus = campuses.filter(campus => campus.name.includes(campusSearch))
             if (foundCampus.length > 0){
-            console.log('students and search length:', foundCampus.length)
             this.updateStudentLength(foundCampus.length)
             return (
                 foundCampus.map(campus => {
@@ -75,7 +74,6 @@ class Campuses extends Component {
                     })
             )
           } 
-          console.log('nobody', 0)
         this.updateStudentLength(0)
           return (
             <>
@@ -99,12 +97,10 @@ class Campuses extends Component {
           )
         } 
         else if (campuses.length > 0){
-            console.log('campuses length:', campuses.length)
             this.updateStudentLength(campuses.length)
                return (
                 campuses.map(campus => {
                     const studentsLength = this.props.students.filter(student => student.campusId === campus.id)
-                    console.log(studentsLength)
                     return (
                         <tr key={campus.id}>
                             <td> <Link to={`/campuses/${campus.id}`}> {campus.name} </Link> </td>
@@ -124,7 +120,6 @@ class Campuses extends Component {
                )
         } 
         else if (campuses.length === 0){
-            console.log('no campuses', campuses.length)
             this.updateStudentLength(0)
               return (
             <>

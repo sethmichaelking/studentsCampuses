@@ -65,7 +65,6 @@ class Students extends Component {
             const foundStudent = students.filter(student => student.firstName.includes(search))
             const school = this.props.campuses.find(campus => campus.id === foundStudent.campusId)
             if (foundStudent.length > 0){
-            console.log('students and search length:', foundStudent.length)
             this.updateStudentLength(foundStudent.length)
             return (
                     foundStudent.map(student => {
@@ -109,7 +108,6 @@ class Students extends Component {
           )
         } 
         else if (students.length > 0){
-            console.log('students length:', students.length)
             this.updateStudentLength(students.length)
                return (
                 students.map(student => {
@@ -130,7 +128,6 @@ class Students extends Component {
                )
         } 
         else if (students.length === 0){
-            console.log('no students', students.length)
             this.updateStudentLength(students.length)
               return (
             <>
@@ -199,7 +196,6 @@ class Students extends Component {
   render() {
     const { students, search } = this.props
     const { studentLength } = this.state
-    console.log('localstate:', studentLength)
     const { displayStudents } = this
     return (
       <div>

@@ -49,7 +49,8 @@ class Home extends Component {
   constructor(){
     super()
     this.state = {
-      loading: false
+      loading: false,
+      loggedInUser: ''
     }
     this.average = this.average.bind(this)
     this.averageOneCampusGPA = this.averageOneCampusGPA.bind(this)
@@ -187,8 +188,17 @@ class Home extends Component {
       console.log(err)
     }
   }
+
+  componentDidMount(){
+    this.setState({ isLoggedIn: this.props.loggedInUser })
+  }
+  componentDidUpdate(prevProps){
+    if(prevProps.loggedInUser.length === 0 && this.props.loggedInUser.length === 1){
+      this.setState({ loggedInUser: this.props.loggedInUser })
+    }
+  }
   render() {
-    const { students, campuses, select } = this.props
+    const { students, campuses, select, loggedInUser } = this.props
     const { loading } = this.state
     return (
       <div>
@@ -287,6 +297,7 @@ const mapState = (state, otherProps) => {
       students: state.students.sort((a,b) => b.gpa - a.gpa),
       campuses: state.campuses.sort((a,b) => a.id - b.id),
       select: state.selected,
+      loggedInUser: state.loggedInUser
   }
 }
 const mapDispatch = (dispatch) => {
