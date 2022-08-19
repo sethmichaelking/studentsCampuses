@@ -196,7 +196,7 @@ class Students extends Component {
     componentDidUpdate(prevProps){
         if (prevProps.students.length !== this.props.students.length){
            this.props.load()
-           console.log('update campus students')
+           console.log('update campus students length')
         }
     }
   render() {

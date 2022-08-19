@@ -78,15 +78,15 @@ class Campus extends Component {
       <div >
         <GridWrapper style={{width: '90vw', height: '60vw'}}>
         <div style={{ width: '90vw' }}>
-        <section class="h-13 gradient-custom-2" >
-            <div class="py-10 h-30">
-                <div class="row d-flex h-100" style={{width: '2300px'}}>
-                <div class="">
-                    <div class="card" >
-                        <div class="rounded-top text-white d-flex flex-row" style={{backgroundColor: '#000', height: '200px', width: '90vw'}}>
-                            <div class="ms-4 mt-5 d-flex flex-column" style={{width: '150px', marginLeft: '20px'}}>
+        <section className="h-13 gradient-custom-2" >
+            <div className="py-10 h-30">
+                <div className="row d-flex h-100" style={{width: '2300px'}}>
+                <div className="">
+                    <div className="card" >
+                        <div className="rounded-top text-white d-flex flex-row" style={{backgroundColor: '#000', height: '200px', width: '90vw'}}>
+                            <div className="ms-4 mt-5 d-flex flex-column" style={{width: '150px', marginLeft: '20px'}}>
                                 <img src={campus.profilePicture}
-                                    alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                                    alt="Generic placeholder image" cclass="img-fluid img-thumbnail mt-4 mb-2"
                                     style={{width: '150px', minWidth:'150px', minHeight:'150px', zIndex: 1}} />
                                 <div style={{ width: '700px', marginTop: '10px', zIndex: '200', fontWeight: 'bold', color: 'black', fontSize: '18px'}}>
                                     <div> 
@@ -104,7 +104,7 @@ class Campus extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div class="ms-3" style={{marginTop: '130px', marginLeft:'20px'}}>
+                            <div className="ms-3" style={{marginTop: '130px', marginLeft:'20px'}}>
                             <h5>
                                 <EasyEdit
                                     type="text"
@@ -118,7 +118,7 @@ class Campus extends Component {
                                     value={`${campus.name}`}
                                 />
                             </h5>
-                                <p> 
+                                <div> 
                                 <EasyEdit
                                     type="text"
                                     onSave={updateCity}
@@ -130,26 +130,26 @@ class Campus extends Component {
                                     placeholder={campus.city}
                                     value={`${campus.city}`}
                                 />
-                                </p>
+                                </div>
                             </div>
                         </div>
-                        <div class="p-4 text-black" style={{backgroundColor: '#f8f9fa', width: '90vw'}} >
-                            <div class="d-flex justify-content-end text-center py-1">
+                        <div className="p-4 text-black" style={{backgroundColor: '#f8f9fa', width: '90vw'}} >
+                            <div className="d-flex justify-content-end text-center py-1">
                             <div>
-                                <p class="mb-1 h5"> {campus && students ? students.filter(student => student.campusId === campus.id).length : '0'} </p>
-                                <p class="small text-muted mb-0">Students Enrolled </p>
+                                <p className="mb-1 h5"> {campus && students ? students.filter(student => student.campusId === campus.id).length : '0'} </p>
+                                <p className="small text-muted mb-0">Students Enrolled </p>
                             </div>
                             </div>
                         </div>
-                        <div class="card-body p-4 text-black" style={{height: '60vh'}}>
-                                <div class="mb-5">
-                                    <p class="lead fw-normal mb-1">School Description</p>
-                                    <div class="p-4" style={{backgroundColor: '#f8f9fa'}}>
-                                        <p class="font-italic mb-1">{campus.description}</p>
+                        <div className="card-body p-4 text-black" style={{height: '60vh'}}>
+                                <div className="mb-5">
+                                    <p className="lead fw-normal mb-1">School Description</p>
+                                    <div className="p-4" style={{backgroundColor: '#f8f9fa'}}>
+                                        <p className="font-italic mb-1">{campus.description}</p>
                                     </div>
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center mb-4">
-                                    <p class="lead fw-normal mb-0">Students Enrolled</p>
+                                <div className="d-flex justify-content-between align-items-center mb-4">
+                                    <p className="lead fw-normal mb-0">Students Enrolled</p>
                                 </div>
                                 <div>
                                     <div style={{

@@ -110,6 +110,9 @@ app.post('/login', async(req, res)=> {
     console.log('user not found')
   }
   const dbPassword = user.password
+  if (user.password === null){
+    console.log('no pass!')
+  }
   bcrypt.compare(password, dbPassword).then((match) => {
     if (!match){
       console.log('user combination is wrong')

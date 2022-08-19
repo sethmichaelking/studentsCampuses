@@ -48,14 +48,6 @@ class Analytics extends Component {
   componentDidMount(){
     try {
       this.props.load()
-      this.setState({ 
-        loading: true
-      })
-      setTimeout(()=> {
-          tzehis.setState({ 
-            loading: false
-          })
-      }, 1000)
     }
     catch(err){
       console.log(err)

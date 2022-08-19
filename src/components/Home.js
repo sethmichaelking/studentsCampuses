@@ -175,23 +175,21 @@ class Home extends Component {
   componentDidMount(){
     try {
       this.props.load()
+      this.setState({ isLoggedIn: this.props.loggedInUser })
       this.setState({ 
         loading: true
       })
-      setTimeout(()=> {
-          this.setState({ 
+      setTimeout(async ()=> {
+          await this.setState({ 
             loading: false
           })
-      }, 1000)
+      }, 1600)
     }
     catch(err){
       console.log(err)
     }
   }
 
-  componentDidMount(){
-    this.setState({ isLoggedIn: this.props.loggedInUser })
-  }
   componentDidUpdate(prevProps){
     if(prevProps.loggedInUser.length === 0 && this.props.loggedInUser.length === 1){
       this.setState({ loggedInUser: this.props.loggedInUser })
@@ -200,6 +198,7 @@ class Home extends Component {
   render() {
     const { students, campuses, select, loggedInUser } = this.props
     const { loading } = this.state
+    console.log('loading', loading)
     return (
       <div>
        <HeadWrapper >
@@ -265,7 +264,7 @@ class Home extends Component {
                   </>
                   : 
                   <>
-                { loading ?       <tr style={{borderBottom: 'thin solid #dadce5'}}>
+                { loading ?  <tr style={{borderBottom: 'thin solid #dadce5'}}>
                 <td colSpan={6} style={{ borderBottom: 'thin solid #dadce5' }}>
                   <div >
                       <div style= {{ height: '200px', width: '87vw'}} > 

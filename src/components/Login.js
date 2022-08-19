@@ -8,6 +8,7 @@ import { Button } from 'react-bootstrap'
 import {registerUser} from '../store'
 import { Link } from 'react-router-dom';
 import { loginUser } from '../store'
+import Alert from 'react-bootstrap/Alert';
 
 const GridWrapper = styled.div`
   display: grid;
@@ -27,7 +28,7 @@ class Login extends Component {
         this.state = {
             welcomeMsg: '',
             subHeaderMsg: '',
-            user: '',
+            auth: '',
             loading: false,
             email: '',
             password: ''
@@ -59,11 +60,6 @@ class Login extends Component {
 
     async onSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
-        // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-        // console.log('Name: ' + profile.getName());
-        // console.log('Image URL: ' + profile.getImageUrl());
-        //we'll use the below email onSigIn to then find the user in the datbase after their authed 
-        // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
         const email = profile.getEmail()
         this.setState({ user: email })
         var id_token = googleUser.getAuthResponse().id_token;
@@ -116,16 +112,32 @@ class Login extends Component {
 
         }
     }
+    componentDidUpdate(prevProps){
+        if(prevProps.signedInUser !== this.props.signedInUser) {
+           this.setState({ auth: this.props.signedInUser.id })
+            console.log('update', this.state.auth)
+            this.setState({ show: true })
+            setTimeout(async () => {
+             await this.setState({ show: false })
+             location.assign('/#/home')
+            }, 3000)
+        }
+    }
    render() {
     const { welcomeMsg, subHeaderMsg, email, password } = this.state
     const { register, loginUser } = this
+    console.log('update', this.state.auth)
     return (
       <div style={{height: '100vh', width: '100vw'}}>
         <GridWrapper>
         <section style={{background: '#dadce5', width: '100vw'}}>
-                <div style={{fontWeight: 'bold', marginLeft: '34px', marginTop: '13px'}}>
-                 StudentTracker
-                </div> 
+                {this.state.auth > 0 && this.state.show ? 
+                    <div>
+                        <Alert key='success' variant='success'>
+                         <h4 style={{textAlign: 'center'}}className="alert-heading"> Login Successful!</h4>
+                        </Alert>
+                    </div> 
+                : null}
                 <div className="">
                     <div className="row d-flex justify-content-center align-items-center h-100" style={{marginTop: '20px'}}>
                     <div className="col-12 col-md-8 col-lg-6 col-xl-5" style={{height: '100vh', marginTop: '10px'}}>
@@ -183,7 +195,8 @@ class Login extends Component {
 
 const mapState = (state) => {
     return {
-        user: state.loggedInUser
+        user: state.loggedInUser || {},
+        signedInUser: state.loggedInUser || {}
     }
 }
 
@@ -201,4 +214,4 @@ const mapDispatch = (dispatch) => {
   }
 }
 
-export default connect(null, mapDispatch)(Login)
+export default connect(mapState, mapDispatch)(Login)

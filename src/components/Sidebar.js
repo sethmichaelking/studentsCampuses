@@ -146,7 +146,7 @@ class Sidenav extends Component {
             {
               path: '/analytics',
               name: 'Analytics',
-              css: 'fa-solid fa-chart-line',
+              css: "fa-solid fa-chart-line",
               key: 4
             },
             {
