@@ -107,6 +107,10 @@ export const registerUser = (user) => {
         const email = user.email
         const password = user.password
         const response = await axios.post('/register', user)
+        if (response.status === 200){
+            toastr.success('User Created', 'You are now registerd and can login.')
+            return
+        } 
     }
 }
 export const setSearch = (search) => {

@@ -2,7 +2,7 @@ const cookieParser = require('cookie-parser')
 const express = require('express')
 const path = require('path')
 const db = require('../db')
-const { conn, Student, Campus, User } = db
+const { conn, Student, Campus, User, Instructor } = db
 const app = express()
 const {OAuth2Client} = require('google-auth-library');
 const { default: axios } = require('axios')
@@ -90,10 +90,11 @@ app.post('/register', (req, res)=> {
       password: hash
     }).then(()=> {
       console.log('user is registered')
-      return res.status(200).redirect('/users')
+      return res.sendStatus(200)
     }).catch((err)=> {
       if (err){
-        console.log(err)
+        res.status(500).send({error: 'Could not log in'})
+        return 
       }
     })
   })
@@ -107,12 +108,14 @@ app.post('/login', async(req, res)=> {
     }
   })
   if (!user){
-    console.log('user not found')
+    //this will need to be an error displayed on the front end, doing return so it atelast doesnt crash app 
+    return 'not found'
+  }
+  if (user.password === null){
+    //this will need to be an error displayed on the front end, doing return so it atelast doesnt crash app 
+    return 'no pass!'
   }
   const dbPassword = user.password
-  if (user.password === null){
-    console.log('no pass!')
-  }
   bcrypt.compare(password, dbPassword).then((match) => {
     if (!match){
       console.log('user combination is wrong')
@@ -217,6 +220,14 @@ app.post('/api/students', async(req, res) => {
   }
   catch(err){
     console.log(err)
+  }
+})
+app.get('/instructors', async(req, res) => {
+  try {
+
+  }
+  catch(err){
+    
   }
 })
 
@@ -326,6 +337,18 @@ const syncAndSeed = async() => {
       location: 'Los Angeles, CA',
       major: 'History',
       phone: '203-0404-3443'
+    })
+  ])
+  await Promise.all([
+    Instructor.create({
+      firstName: 'Joseph',
+      lastName: 'Brodsky',
+      campusId: 2
+    }),
+    Instructor.create({
+      firstName: 'Madeline',
+      lastName: 'Yosef',
+      campusId: 1
     })
   ])
 }

@@ -2,6 +2,17 @@ const { STRING, INTEGER, DECIMAL } = require('sequelize')
 const Sequelize = require('sequelize')
 const conn = new Sequelize('postgres://localhost/acme_schools_db' || process.env.DATABASE_URL)
 
+const Instructor = conn.define('instructor', {
+    firstName: {
+        type: STRING,
+        allowNull: false
+    },
+    lastName: {
+        type: STRING,
+        allowNull: false
+    }
+})
+
 const Student = conn.define('student', {
     firstName: {
         type: STRING,
@@ -85,6 +96,9 @@ const Campus = conn.define('campus', {
 
 Student.belongsTo(Campus)
 Campus.hasMany(Student)
+Instructor.belongsTo(Campus)
+Campus.hasMany(Campus)
+
 
 Student.beforeCreate(student => {
     if (student.gpa > 4.0 || student.gpa < 0) {
@@ -96,5 +110,6 @@ module.exports = {
     conn,
     Campus,
     Student,
-    User
+    User,
+    Instructor
 }

@@ -10,6 +10,7 @@ import Login from './Login'
 import { connect } from 'react-redux'
 import Register from './Register'
 import Analytics from './Analytics'
+import Instructors from './Instructors'
 class App extends Component {
   constructor(props){
     super(props)
@@ -54,6 +55,7 @@ class App extends Component {
             <Route path='/students/:id' component={Student} />
             <Route path='/campuses/:id' component={Campus} />
             <Route path='/analytics' component={Analytics} />
+            <Route path='/instructors' component={Instructors} />
           </Switch>
         </Router>
       </div>

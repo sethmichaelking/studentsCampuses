@@ -31,15 +31,48 @@ class Login extends Component {
             auth: '',
             loading: false,
             email: '',
-            password: ''
+            password: '',
+            emailError: '',
+            passwordError: '',
+            noEmailorPassword: false
         }
         this.onSignIn = this.onSignIn.bind(this)
         this.signOut = this.signOut.bind(this)
         this.register = this.register.bind(this)
         this.loginUser = this.loginUser.bind(this)
+        this.timeOutEmailError = this.timeOutEmailError.bind(this)
+        this.timeOutPasswordError = this.timeOutPasswordError.bind(this)
+        this.timeOutEmailAndPassError = this.timeOutEmailAndPassError.bind(this)
+    }
+    timeOutEmailAndPassError(){
+        setTimeout(()=> {
+            this.setState({ noEmailorPassword: '' })
+        }, 4000)
+    }
+    timeOutEmailError(){
+        setTimeout(()=> {
+            this.setState({ emailError: '' })
+        }, 4000)
+    }
+    timeOutPasswordError(){
+        setTimeout(()=> {
+            this.setState({ passwordError: '' })
+        }, 4000)
     }
     loginUser(){
         const userCredentials = ({ email: this.state.email, password: this.state.password })
+        if (this.state.password.length === 0 && this.state.email.length === 0){
+            this.setState({ noEmailorPassword: true })
+            return
+        }
+        if (this.state.email.length === 0){
+            this.setState({ emailError: 'Enter an email' })
+            return
+        }
+        if (this.state.password.length === 0){
+            this.setState({ passwordError: 'Enter an password' })
+            return 
+        }
         this.props.login(userCredentials)
         this.setState({ email: '' })
         this.setState({ password: '' })
@@ -117,30 +150,40 @@ class Login extends Component {
            this.setState({ auth: this.props.signedInUser.id })
             console.log('update', this.state.auth)
             this.setState({ show: true })
-            setTimeout(async () => {
-             await this.setState({ show: false })
+            setTimeout(() => {
+            this.setState({ show: false })
              location.assign('/#/home')
             }, 3000)
         }
     }
    render() {
     const { welcomeMsg, subHeaderMsg, email, password } = this.state
-    const { register, loginUser } = this
-    console.log('update', this.state.auth)
+    const { loginUser, timeOutEmailAndPassError } = this
     return (
-      <div style={{height: '100vh', width: '100vw'}}>
+      <div style={{height: '100vh', width: '100vw', overflowY: 'hidden'}}>
         <GridWrapper>
-        <section style={{background: '#dadce5', width: '100vw'}}>
-                {this.state.auth > 0 && this.state.show ? 
+        <section style={{background: '#dadce5', width: '100vw', overflowY: 'hidden'}}>
+                {
+                this.state.auth > 0 && this.state.show ?
                     <div>
                         <Alert key='success' variant='success'>
                          <h4 style={{textAlign: 'center'}}className="alert-heading"> Login Successful!</h4>
                         </Alert>
                     </div> 
-                : null}
+                : null
+                }
+                {this.state.noEmailorPassword ? 
+                    <div>
+                        <Alert key='danger' variant='danger'>
+                            <h4 style={{textAlign: 'center'}}className="alert-heading"> Enter email and password {`;)`}</h4>
+                        </Alert>
+                        {timeOutEmailAndPassError()}
+                    </div> 
+                : null
+                }
                 <div className="">
                     <div className="row d-flex justify-content-center align-items-center h-100" style={{marginTop: '20px'}}>
-                    <div className="col-12 col-md-8 col-lg-6 col-xl-5" style={{height: '100vh', marginTop: '10px'}}>
+                    <div className="col-12 col-md-8 col-lg-6 col-xl-5" style={{height: '100vh', marginTop: '130px'}}>
                         <div className="card bg-dark text-white" style={{borderRadius: '1rem', width: '80%', marginLeft: '10%', marginBottom: '6%'}}>
                         <div className="card-body p-5 text-center">
 
@@ -153,17 +196,33 @@ class Login extends Component {
                                 <input placeholder='Email' value={email} onChange={(e)=> this.setState({ email: e.target.value })} type="email" id="typeEmailX" className="form-control form-control-lg" />
                             </div>
 
+                            {this.state.emailError.length > 0 ? 
+                                <div style={{
+                                    color: '#ff8989',
+                                    marginTop: '-3%',
+                                    marginBottom: '2%'
+                                }}>
+                                {this.state.emailError} 
+                                {this.timeOutEmailError()}
+                            </div> : null}
+
                             <div className="form-outline form-white mb-4">
                                 <input placeholder='Password' value={password} onChange={(e)=> this.setState({ password: e.target.value })} type="password" id="typePasswordX" className="form-control form-control-lg" />
                             </div>
+
+                            {this.state.passwordError.length > 0 ? 
+                            <div style={{
+                                color: '#ff8989',
+                                marginTop: '-3%',
+                                marginBottom: '2%'
+                            }}>
+                                {this.state.passwordError}
+                                {this.timeOutPasswordError()}
+                            </div> : null }
+
                              <div>
                                 <div style={{display: 'inline-block', marginRight: '4%' }}>
                                     <Button style={{color: 'black', width: '111%', marginRight: '13px'}} onClick={() => loginUser()}>  Login  </Button>
-                                </div>
-                                <div style={{display: 'inline-block', marginRight: '10px'}}>
-                                    <Button variant="light"> 
-                                        <Link to='/register'> Register   </Link>
-                                    </Button>
                                 </div>
                             </div>
                             <p style={{
@@ -177,11 +236,11 @@ class Login extends Component {
                                 </div>
                             </div>
                             <div>
-                            <p className="mb-0">Don't have an account? <a href="#!" className="text-white-50 fw-bold">Sign Up</a>
-                            </p>
+                                <p className="mb-0">Don't have an account? 
+                                    <Link to='/register'> Sign Up </Link>
+                                </p>
                             </div>
-
-                        </div>
+                          </div>
                         </div>
                     </div>
                     </div>

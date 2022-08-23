@@ -113,7 +113,7 @@ class Register extends Component {
     const { welcomeMsg, subHeaderMsg, email, password } = this.state
     const { register } = this
     return (
-      <div style={{height: '100vh', width: '100vw'}}>
+      <div style={{height: '100vh', width: '100vw', overflowY: 'hidden'}}>
         <GridWrapper>
         <section style={{background: '#dadce5', width: '100vw'}}>
                 <div style={{fontWeight: 'bold', marginLeft: '34px', marginTop: '13px'}}>
@@ -143,7 +143,7 @@ class Register extends Component {
                                 </div>
                                 <div style={{display: 'inline-block'}}>
                                     <Button style={{width: '130%'}}> 
-                                        <Link to='/login' style={{color: 'black'}}> Login   </Link>
+                                         <Link to='/login' style={{color: 'black'}}> Login   </Link>
                                     </Button>
                                 </div>
                             </div>
